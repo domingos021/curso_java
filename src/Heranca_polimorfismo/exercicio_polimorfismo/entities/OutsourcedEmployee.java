@@ -1,15 +1,14 @@
 package Heranca_polimorfismo.exercicio_polimorfismo.entities;
-//subclasse
-//Classe funcionário tercerizado
-public class OutsourcedEployee extends Employee {
+
+public class OutsourcedEmployee extends Employee {
     private Double additionalCharge; //pagamento adicinal
 
-    public OutsourcedEployee() {
+    public OutsourcedEmployee() {
         super();
         //C/padrão
     }
 
-    public OutsourcedEployee(String name, Integer hours, Double valuePerHour, Double additionalCharge) {
+    public OutsourcedEmployee(String name, Integer hours, Double valuePerHour, Double additionalCharge) {
         super(name, hours, valuePerHour); //herda os atributos da Superclass
         this.additionalCharge = additionalCharge;
     }
