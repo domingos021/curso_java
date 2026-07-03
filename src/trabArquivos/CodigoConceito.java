@@ -142,6 +142,12 @@ public class CodigoConceito {
      * IOException, que deverá ser tratada ou propagada.
      */
 
+/*
+CONCEITOS DAS CLASSES
+FileReader => (stream de leitura de caracteres a partir de arquivos
+BufferedReader =>(mais rapido)
+ */
+
 
 
     /*
