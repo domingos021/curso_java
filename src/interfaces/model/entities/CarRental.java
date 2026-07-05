@@ -54,6 +54,11 @@ public class CarRental {
     }
 
     public void setInvoice(Invoice invoice) {
+        /*
+        este trecho recebe  espera o bjeto criado Invoice(basicPayment, tax) do rentalService
+        apos isso o setInvoice envia este objeto para o atributo invoice da classe CarRental,
+         fazendo com que o aluguel (CarRental) passe a possuir uma Invoice.
+         */
         this.invoice = invoice;
     }
 

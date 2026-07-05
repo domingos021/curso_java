@@ -58,23 +58,34 @@ public class RentalService {
      4. cria uma nova fatura e associa ao aluguel de carro (carRental.setInvoice)
      */
     public void processInvoice(CarRental carRental) {
-        //Calcula a duração do aluguel em horas
-        double hours = java.time.Duration.between(carRental.getStart(), carRental.getFinish()).toHours();
+
+          /*
+         // Exemplo com horas cheias truncadas (antigo):
+         double hours = java.time.Duration.between(carRental.getStart(), carRental.getFinish()).toHours();
+         */
+        //Calcula a duração do aluguel considerando os minutos na fração
+        double minutes = java.time.Duration.between(carRental.getStart(), carRental.getFinish()).toMinutes();
+        double hours = minutes / 60.0; //calculo da fração
         double basicPayment;
 
         //Se o aluguel for menor ou igual a 12 horas, cobra por hora
         if (hours <= 12.0) {
-            basicPayment = pricePerHour * Math.ceil(hours);
+            basicPayment = pricePerHour * Math.ceil(hours); //arredondas horas para cima e multiplica com o perço pos hora
         } else {
             //Se o aluguel for maior que 12 horas, cobra por dia
             basicPayment = pricePerDay * Math.ceil(hours / 24.0);
         }
 
+        /*
+        o metodo taxService na classe BrazilTaxService,
+        recebe o valor do basicPayment e retorna o valor do imposto a ser pago.
+       */
         //Calcula o imposto usando o serviço de imposto
         double tax = taxService.taxService(basicPayment);
 
         //Cria uma nova fatura e associa ao aluguel de carro
       /*
+
         O método setInvoice() espera receber um objeto do tipo Invoice.
 
         Por isso, criamos uma nova fatura utilizando:
@@ -89,6 +100,9 @@ public class RentalService {
         que encapsula todas as informações da fatura.
 
         Esse é um exemplo de composição, pois CarRental TEM uma Invoice.
+
+        CarRental tem setInvoice que espera um objeto Invoice,
+         e Invoice é criado com os valores de basicPayment e tax.
         */
         carRental.setInvoice(new Invoice(basicPayment, tax));
     }
