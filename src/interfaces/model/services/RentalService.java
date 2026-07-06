@@ -7,14 +7,31 @@ public class RentalService {
     private Double pricePerHour;
     private Double pricePerDay;
 
-    //Composição dizendo que RentalService usa o bjeto taxService
-    private BrazilTaxService taxService; // usa o objeto como argumento
+    // INTERFACE
+    // Serviço responsável pelo cálculo de impostos.
+    // A interface permite trocar facilmente a implementação.
+
+    /*
+     A RentalService depende apenas da interface TaxService,
+     e não de uma implementação específica.
+
+     Assim, caso a regra de cálculo de impostos mude ou seja
+     necessário utilizar outro serviço (por exemplo, para outro país),
+     basta criar uma nova classe que implemente TaxService.
+
+     O único código que precisa ser alterado é a classe que implementa
+     a interface, mantendo a RentalService desacoplada.
+
+     Em outras palavras, a RentalService não conhece a BrazilTaxService;
+     ela conhece apenas o contrato (TaxService).
+    */
+    private TaxService taxService;
 
 
     public RentalService() {
     }
 
-    public RentalService(Double pricePerHour, Double pricePerDay, BrazilTaxService taxService) {
+    public RentalService(Double pricePerHour, Double pricePerDay, TaxService taxService) {
         this.pricePerHour = pricePerHour;
         this.pricePerDay = pricePerDay;
         this.taxService = taxService;
@@ -36,11 +53,13 @@ public class RentalService {
         this.pricePerDay = pricePerDay;
     }
 
-    public BrazilTaxService getTaxService() {
+    // AJUSTADO: Retorna o tipo genérico da Interface, mantendo o desacoplamento
+    public TaxService getTaxService() {
         return taxService;
     }
 
-    public void setTaxService(BrazilTaxService taxService) {
+    // AJUSTADO: Aceita qualquer classe que implemente a Interface TaxService
+    public void setTaxService(TaxService taxService) {
         this.taxService = taxService;
     }
 
@@ -77,16 +96,17 @@ public class RentalService {
         }
 
         /*
-        o metodo taxService na classe BrazilTaxService,
-        recebe o valor do basicPayment e retorna o valor do imposto a ser pago.
+        AJUSTADO COMENTÁRIO:
+        o metodo taxService definido na interface TaxService,
+        recebe o valor do basicPayment e retorna o valor do imposto a ser pago baseado na regra da classe injetada.
        */
         //Calcula o imposto usando o serviço de imposto
-        double tax = taxService.taxService(basicPayment);
+        double tax = taxService.tax(basicPayment);
 
         //Cria uma nova fatura e associa ao aluguel de carro
       /*
 
-        O método setInvoice() espera receber um objeto do tipo Invoice.
+        O método setInvoice() etiquette espera receber um objeto do tipo Invoice.
 
         Por isso, criamos uma nova fatura utilizando:
 
