@@ -41,6 +41,7 @@ public class Program {
 
 
 /*
+*COMBINAÇÃO DE CLASSE ABSTRATA E INTERFACE
  *                     +------------------+
  *                     |      Shape       | <<interface>>
  *                     +------------------+
