@@ -4,6 +4,7 @@ import java.security.InvalidParameterException;
 
 public interface InterestService {
 
+    //method that return the interestRate
     double getInterestRate();   // Abstract method
 
     /*
@@ -15,6 +16,7 @@ public interface InterestService {
      * The calculation depends on getInterestRate(), which is implemented
      * by each class to provide its own interest rate.
      */
+    // methods that returns the calculation
     default double payment(double amount, int months) { // Default method
         if (months < 1) {
             throw new InvalidParameterException("Months must be greater than zero");

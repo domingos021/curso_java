@@ -2,6 +2,7 @@ package interfaces.defaultMethods.app;
 
 import generals_utils.utils.Leitor;
 import interfaces.defaultMethods.model.services.BrazilInterestService;
+import interfaces.defaultMethods.model.services.InterestService;
 import interfaces.defaultMethods.model.services.UsaInterestService;
 
 import java.util.Locale;
@@ -25,8 +26,8 @@ public class Program {
              * *
              * *Here we have two InterestService
              */
-            BrazilInterestService is = new BrazilInterestService(1.00); //From Brazil
-            UsaInterestService usais = new UsaInterestService(2.00); // From Usa
+            InterestService is = new BrazilInterestService(1.00); //From Brazil
+            InterestService usais = new UsaInterestService(2.00); // From Usa
             double payment = is.payment(amount, months);
             double usa_payment = usais.payment(payment, months);
 
