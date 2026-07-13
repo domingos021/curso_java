@@ -1,4 +1,4 @@
-package interfaces.model.entities;
+package interfaces.rentalcar.model.entities;
 
 public class Vehicle {
     private String model;//modelo do veiclo

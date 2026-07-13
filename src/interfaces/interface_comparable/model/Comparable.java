@@ -18,5 +18,5 @@ package interfaces.interface_comparable.model;
  */
 
 public interface Comparable <T>  {
-    int compareTo(T o);
+    int compareTo(T other);
 }

@@ -1,4 +1,4 @@
-package interfaces.utils;
+package generals_utils.utils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

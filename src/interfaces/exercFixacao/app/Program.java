@@ -4,7 +4,9 @@ import interfaces.exercFixacao.model.entities.Contract;
 import interfaces.exercFixacao.model.entities.Installments;
 import interfaces.exercFixacao.model.sevices.ContractService;
 import interfaces.exercFixacao.model.sevices.PaypalService;
-import interfaces.utils.Leitor;
+import interfaces.exercFixacao.model.utils.Leitor;
+
+
 
 
 import java.time.LocalDate;
@@ -21,7 +23,7 @@ public class Program {
             LocalDate contractDate = Leitor.lerData(sc, "Data do contrato (dd/MM/yyyy):");
             double totalValue = Leitor.lerNumeroDouble(sc, "Valor total do contrato):");
 
-            Contract  obj = new Contract(contractNumber, contractDate, totalValue);
+            Contract obj = new Contract(contractNumber, contractDate, totalValue);
             //PARCELAS
 
             int numberOfInstallments = Leitor.lerNumeroInteiro(sc, "Entre com o número de parcelas:");

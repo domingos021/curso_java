@@ -1,6 +1,6 @@
-package interfaces.model.entities;
+package interfaces.rentalcar.model.entities;
 
-public class Invoice {
+public class Invoice  {
     //invoice => fatura
     private Double basicPayment;
     private Double tax; //=>imposto

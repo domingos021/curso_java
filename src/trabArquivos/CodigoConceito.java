@@ -50,7 +50,7 @@ public class CodigoConceito {
         * permitindo ler o conteúdo do arquivo em vez da entrada do teclado.
           */
 
-        File file = new File("C:\\temp01\\in.txt");;
+        File file = new File("C:\\temp01\\in.txt");
         // Mostra o caminho absoluto do arquivo no sistema operacional
         System.out.println(file.getAbsolutePath());
 

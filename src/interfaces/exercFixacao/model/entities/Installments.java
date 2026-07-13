@@ -1,6 +1,5 @@
 package interfaces.exercFixacao.model.entities;
-
-import interfaces.utils.FormatadorData;
+import interfaces.exercFixacao.model.utils.FormatadorData;
 
 import java.time.LocalDate;
 

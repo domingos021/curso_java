@@ -1,4 +1,4 @@
-package interfaces.model.services;
+package interfaces.rentalcar.model.services;
 
 // SERVIÇO PARA CALCULAR IMPOSTOS
 public class BrazilTaxService implements TaxService {

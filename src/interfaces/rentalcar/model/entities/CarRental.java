@@ -1,17 +1,28 @@
-package interfaces.model.entities;
+package interfaces.rentalcar.model.entities;
+
 
 import java.time.LocalDateTime;
 
-
+/**
+ * The CarRental class represents a rental transaction.
+ * It demonstrates the concept of COMPOSITION (HAS-A relationship)
+ * by holding references to Vehicle and Invoice objects.
+ */
 public class CarRental {
+
     private LocalDateTime start;
     private LocalDateTime finish;
-    private Vehicle vehicle; // CarRental se associa a classe vehicle
-    private Invoice invoice; // CarRental se associa a classe Invoice
-    // |VEHICLE| <------- |carRental| -------> |INVOICE|  => composição (tem um)
-    // CarRental possui um Vehicle e uma Invoice, mas não é um Vehicle nem uma Invoice.
 
-    //CONSTRUTORES
+    // CarRental associates with the Vehicle and Invoice classes
+    // |VEHICLE| <------- |carRental| -------> |INVOICE|  => COMPOSITION (HAS-A)
+    // CarRental has a Vehicle and an Invoice, but it IS NOT a Vehicle nor an Invoice.
+    private Vehicle vehicle;
+    private Invoice invoice;
+
+    // =========================================================================
+    // CONSTRUCTORS
+    // =========================================================================
+
     public CarRental() {
     }
 
@@ -19,11 +30,12 @@ public class CarRental {
         this.start = start;
         this.finish = finish;
         this.vehicle = vehicle;
-
+        // Note: The invoice starts as null because it is calculated later by RentalService
     }
 
-    public CarRental(String model) {
-    }
+    // =========================================================================
+    // GETTERS & SETTERS
+    // =========================================================================
 
     public LocalDateTime getStart() {
         return start;
@@ -55,97 +67,93 @@ public class CarRental {
 
     public void setInvoice(Invoice invoice) {
         /*
-        este trecho recebe  espera o bjeto criado Invoice(basicPayment, tax) do rentalService
-        apos isso o setInvoice envia este objeto para o atributo invoice da classe CarRental,
-         fazendo com que o aluguel (CarRental) passe a possuir uma Invoice.
+         * This setter receives the Invoice object created by RentalService.
+         * Then, it assigns this object to the invoice attribute,
+         * establishing that this CarRental now possesses an Invoice.
          */
         this.invoice = invoice;
     }
 
     /*
-        ===============================================================================
-        COMPOSIÇÃO x HERANÇA
-        ===============================================================================
+    ===============================================================================
+    COMPOSIÇÃO x HERANÇA
+    ===============================================================================
 
-        Neste caso utilizamos COMPOSIÇÃO e não HERANÇA, porque um aluguel (CarRental)
-        não é um veículo.
+    Neste caso utilizamos COMPOSIÇÃO e não HERANÇA, porque um aluguel (CarRental)
+    não é um veículo.
 
-        O aluguel apenas utiliza um veículo para existir e gera uma fatura ao final.
+    O aluguel apenas utiliza um veículo para existir e gera uma fatura ao final.
 
-        Para representar isso, CarRental possui (tem um):
+    Para representar isso, CarRental possui (tem um):
 
-            CarRental
-                |
-                +----> Vehicle
-                |
-                +----> Invoice
+        CarRental
+            |
+            +----> Vehicle
+            |
+            +----> Invoice
 
-        Ou seja:
+    Ou seja:
 
-            CarRental TEM um Vehicle.
-            CarRental TEM uma Invoice.
+        CarRental TEM um Vehicle.
+        CarRental TEM uma Invoice.
 
-        Esse relacionamento é chamado de COMPOSIÇÃO (ou associação), pois uma classe
-        possui objetos de outras classes como parte da sua estrutura.
+    Esse relacionamento é chamado de COMPOSIÇÃO (ou associação), pois uma classe
+    possui objetos de outras classes como parte da sua estrutura.
 
-        -------------------------------------------------------------------------------
+    -------------------------------------------------------------------------------
 
-        Já a HERANÇA representa uma relação completamente diferente.
+    Já a HERANÇA representa uma relação completamente diferente.
 
-        Ela só deve ser utilizada quando a classe filha realmente for um tipo mais
-        específico da classe pai.
+    Ela só deve ser utilizada quando a classe filha realmente for um tipo mais
+    específico da classe pai.
 
-        Em outras palavras, quando existir uma relação do tipo:
+    Em outras palavras, quando existir uma relação do tipo:
 
-                            "É UM" (IS-A)
+                        "É UM" (IS-A)
 
-        Exemplo:
+    Exemplo:
 
-                Animal
-                   ▲
-                   │
-              Cachorro
+            Animal
+               ▲
+               │
+          Cachorro
 
-        Animal é a classe mais genérica (superclasse).
+    Animal é a classe mais genérica (superclasse).
 
-        Cachorro é uma especialização de Animal (subclasse).
+    Cachorro é uma especialização de Animal (subclasse).
 
-        Todo cachorro é um animal.
+    Todo cachorro é um animal.
 
-        Por isso faz sentido escrever:
+    Por isso faz sentido escrever:
 
-            class Cachorro extends Animal
+        class Cachorro extends Animal
 
-        Nesse caso, Cachorro herda todas as características e comportamentos comuns de
-        Animal e ainda pode adicionar características próprias, como:
+    Nesse caso, Cachorro herda todas as características e comportamentos comuns de
+    Animal e ainda pode adicionar características próprias, como:
 
-            - raça
-            - latir()
+        - raça
+        - latir()
 
-        -------------------------------------------------------------------------------
+    -------------------------------------------------------------------------------
 
-        Regra prática:
+    Regra prática:
 
-        Se a frase fizer sentido:
+    Se a frase fizer sentido:
 
-            "Minha classe É um(a) objeto da outra."
+        "Minha classe É um(a) objeto da outra."
 
-        → Utilize HERANÇA (extends).
+    → Utilize HERANÇA (extends).
 
-        Se a frase fizer sentido:
+    Se a frase fizer sentido:
 
-            "Minha classe TEM um(a) objeto da outra."
+        "Minha classe TEM um(a) objeto da outra."
 
-        → Utilize COMPOSIÇÃO (atributos).
+    → Utilize COMPOSIÇÃO (atributos).
 
-        Essa é uma das principais formas de identificar qual relacionamento utilizar
-        durante a modelagem de um sistema orientado a objetos.
-        ===============================================================================
-        */
-
-
-
-}
+    Essa é uma das principais formas de identificar qual relacionamento utilizar
+    durante a modelagem de um sistema orientado a objetos.
+    ===============================================================================
+    */
 
     /*
     ===============================================================================
@@ -157,7 +165,7 @@ public class CarRental {
 
     Definição:
     Herança é um mecanismo da Programação Orientada a Objetos que permite que uma
-    classe herde( atributos) e( métodos )de outra classe.
+    classe herde atributos e métodos de outra classe.
 
     A classe que herda é chamada de SUBCLASSE (classe filha), enquanto a classe da
     qual ela herda é chamada de SUPERCLASSE (classe pai).
@@ -375,7 +383,6 @@ public class CarRental {
     uma verdadeira relação de "É UM", pois gera um código mais flexível, organizado
     e de fácil manutenção.
     ===============================================================================
-
      */
 
     /*
@@ -404,13 +411,12 @@ public class CarRental {
 
     Exemplos:
 
-        Cachorro( É um) Animal.
+        Cachorro É um Animal.
 
             Animal
                ▲
                │
           Cachorro
-
 
     Todo cachorro é um animal.
 
@@ -420,8 +426,8 @@ public class CarRental {
 
     Nesse caso:
 
-    ANIMAL => termo abrangente cabe todas especies de animais.
-    CACHORRO => termo específico, apenas uma especie de animal.
+    ANIMAL => termo abrangente, cabe todas as espécies de animais.
+    CACHORRO => termo específico, apenas uma espécie de animal.
     ------
     É a classe mais GENÉRICA ou ABRANGENTE (superclasse).
 
@@ -446,7 +452,7 @@ public class CarRental {
     ---------
     É a classe mais ESPECÍFICA (subclasse).
 
-    Ela representa apenas um ( tipo ) de Animal.
+    Ela representa apenas um tipo de Animal.
 
     Além de herdar tudo que Animal possui, ela pode adicionar características
     e comportamentos próprios, como por exemplo:
@@ -460,7 +466,6 @@ public class CarRental {
 
     Essa é uma relação do tipo "É UM" (IS-A), sendo um caso correto para o uso
     de herança (extends).
-
 
     -------------------------------------------------------------------------------
 
@@ -495,8 +500,8 @@ public class CarRental {
 
     -------------------------------------------------------------------------------
 
-    Uma característica muito importante da relação "É UM" é que um objeto da classe
-    filha também pode ser tratado como um objeto da classe pai.
+    Uma विशेषता (característica) muito importante da relação "É UM" é que um objeto
+    da classe filha também pode ser tratado como um objeto da classe pai.
 
     Exemplo:
 
@@ -534,7 +539,7 @@ public class CarRental {
 
     Não.
 
-    Um pedido apenas( possui) um cliente.
+    Um pedido apenas possui um cliente.
 
     -------------------------------------------------------------------------------
 
@@ -551,3 +556,4 @@ public class CarRental {
 
     ===============================================================================
     */
+}

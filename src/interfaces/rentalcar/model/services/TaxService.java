@@ -1,4 +1,4 @@
-package interfaces.model.services;
+package interfaces.rentalcar.model.services;
 
 //Generica ou contrato
 public interface TaxService {

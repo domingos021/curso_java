@@ -1,7 +1,7 @@
-package interfaces.model.services;
+package interfaces.rentalcar.model.services;
 
-import interfaces.model.entities.CarRental;
-import interfaces.model.entities.Invoice;
+import interfaces.rentalcar.model.entities.CarRental;
+import interfaces.rentalcar.model.entities.Invoice;
 
 public class RentalService {
     private Double pricePerHour;
