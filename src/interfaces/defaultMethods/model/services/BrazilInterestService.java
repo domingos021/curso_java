@@ -1,46 +1,27 @@
 package interfaces.defaultMethods.model.services;
 
+public class BrazilInterestService implements InterestService {
 
-import java.security.InvalidParameterException;
-
-public class BrazilInterestService  {
-
-    private  double interestRate; //taxa de juros
+    private double interestRate; // Interest rate
 
     public BrazilInterestService(double interestRate) {
         this.interestRate = interestRate;
     }
-    /*
-     * This class does not implement the InterestService interface,
-     * so it cannot inherit the default payment() method.
-     *
-     * Therefore, the payment() method has to be implemented here,
-     * duplicating the same compound interest calculation.
-     *
-     * If other classes need the same behavior, they will also have
-     * to repeat this method, leading to code duplication and making
-     * future maintenance more difficult.
-     */
-    public double payment(double amount, int months) { // Default method
-        if (months < 1) {
-            throw new InvalidParameterException("Months must be greater than zero");
-        }
 
-        /*
-         * Compound interest formula:
-         *
-         * payment = amount * (1 + interestRate / 100)^months
-         *
-         * Math.pow(base, exponent) calculates the exponentiation.
-         */
-        return amount * Math.pow(1.0 + interestRate / 100.0, months);
-        //return amount * Math.pow(1.0 + getInterestRate() / 100.0, months); using the interface(default methods
-    }
-   /*
+    /*
+     * This class implements the InterestService interface,
+     * so it inherits the default payment() method.
+     *
+     * As a result, only the interest rate needs to be provided,
+     * while the payment calculation is reused from the interface.
+     *
+     * This avoids code duplication and makes maintenance easier,
+     * since changes to the payment calculation are made in only
+     * one place: the interface.
+     */
+
     @Override
     public double getInterestRate() {
         return interestRate;
     }
-
-    */
 }
