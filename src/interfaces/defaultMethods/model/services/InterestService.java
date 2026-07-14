@@ -6,6 +6,7 @@ public interface InterestService {
 
     //method that return the interestRate
     double getInterestRate();   // Abstract method
+    //interface não pode ter construtor
 
     /*
      * Default method shared by all implementations of this interface.
