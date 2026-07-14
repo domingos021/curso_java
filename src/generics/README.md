@@ -41,3 +41,5 @@
     
     A mesma classe pode trabalhar com diferentes tipos, e o tipo é definido
     no momento em que o objeto é criado.
+
+    #GENERICOS DELIMITADOS

@@ -43,6 +43,8 @@ public class PrintService<T> {
     }
 
 
+    /*
+
     // Printing the list
     public void print() {
         System.out.print("[");
@@ -58,5 +60,18 @@ public class PrintService<T> {
         System.out.println("]");
     }
 
+     */
+    // Printing each item on a separate line
+    public void print() {
+
+        if (list.isEmpty()) {
+            System.out.println("List is empty");
+            return;
+        }
+
+        for (T item : list) {
+            System.out.println(item);
+        }
+    }
 
 }
