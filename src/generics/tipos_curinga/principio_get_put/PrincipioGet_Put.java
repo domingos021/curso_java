@@ -1,6 +1,7 @@
 package generics.tipos_curinga.principio_get_put;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -120,77 +121,127 @@ public class PrincipioGet_Put {
 
         Locale.setDefault(Locale.US);
 
-        // Lista de Number
-        List<Object> objList = new ArrayList<>();
-        objList.add("Dinis");
-        objList.add("Aline");
 
-        /*
-         * =========================================================================
-         * CONTRAVARIÂNCIA (Contravariance)
-         * =========================================================================
-         *
-         * List<? super Integer>
-         *
-         * Aceita uma lista de Integer ou de qualquer uma de suas superclasses.
-         *
-         * Neste exemplo:
-         *
-         *      Integer
-         *          ▲
-         *          │
-         *       Number
-         *          ▲
-         *          │
-         *        Object
-         *
-         * Como Number é superclasse de Integer,
-         * podemos fazer:
-         */
+        List<Integer> myInts = Arrays.asList(1,2,3,4);
+        List<Double> myDoubles = Arrays.asList(3.4,6.28);
+        List<Object> myObjs = new ArrayList<>();
 
-        /*
-         * ? super Number significa:
-         *
-         * Aceita uma referência para uma lista cujo tipo seja
-         * Number ou qualquer uma de suas superclasses.
-         *
-         * Exemplos válidos:
-         *
-         *     List<Number>
-         *     List<Object>
-         *
-         * Exemplo inválido:
-         *
-         *     List<Integer> // Integer é subclasse de Number
-         */
-        List<? super Number> myNums = objList;
+        //=============== Lista de inteiros =================
+        copy(myInts,myObjs);
+        printList(myObjs); //imprime
 
-        // PUT (Adicionar) -> PERMITIDO
-        myNums.add(30); //-> qualquer valor do tipo Number(ex:30) ou objetos de um super tipo de number, mas não pode acessar os objets da lista
-        myNums.add(40.5);
-
-
-        // pode acessar o elemento da lista e tentar guardar
-        // numa variável do tipo Number os objets da lista(da erro de compilação
-        //Number x = myNums.get(0);  erro
-
-        // GET (Ler) -> Apenas Object é garantido
-        Object obj = myNums.get(0);
-
-        System.out.println(obj);
-
-        /*
-         * Isto NÃO é permitido:
-         *
-         * Integer x = list.get(0); // Erro
-         *
-         * porque o compilador não sabe se a lista real é:
-         *
-         *      List<Integer>
-         *      List<Number>
-         *      List<Object>
-         *
-         * Portanto, ele garante apenas Object.
-         */
+        //================= lista de Double ============
+        copy(myDoubles,myObjs);
+        printList(myObjs);//imprime
     }
+
+    /*
+     * Lista de origem (Source) ->List<? extends  Number> source (covariaça)
+     *
+     * List<? extends Number>
+     *
+     * Representa uma lista de algum tipo que é Number
+     * ou uma de suas subclasses.
+     *
+     * Exemplos:
+     *     List<Integer>
+     *     List<Double>
+     *     List<Float>
+     *
+     * Como não sabemos o tipo exato da lista,
+     * ela é ideal para leitura (GET).
+     */
+
+
+    /*
+     * Lista de destino (Target) ->List<? super Number> target (contravariança)
+     *
+     * List<? super Number>
+     *
+     * Representa uma lista de Number ou de qualquer
+     * uma de suas superclasses.
+     *
+     * Exemplos:
+     *     List<Number>
+     *     List<Object>
+     *
+     * Como sabemos que essas listas podem armazenar
+     * objetos Number, elas são ideais para escrita (PUT).
+     */
+
+    //===========================================================================================
+    /*
+     * Copia todos os elementos de uma lista de origem (source)
+     * para uma lista de destino (target).
+     *
+     * =========================================================================
+     * List<? extends Number> source
+     * =========================================================================
+     *
+     * A lista de origem utiliza '? extends Number' porque
+     * seu objetivo é apenas PRODUZIR (GET) elementos.
+     *
+     * Ela pode ser:
+     *
+     *     List<Integer>
+     *     List<Double>
+     *     List<Float>
+     *     List<Number>
+     *
+     * Como todos esses tipos são Number ou subclasses,
+     * podemos fazer:
+     *
+     *     Number number = source.get(i);
+     *
+     * Porém não podemos adicionar elementos na lista source.
+     *
+     * =========================================================================
+     * List<? super Number> target
+     * =========================================================================
+     *
+     * A lista de destino utiliza '? super Number' porque
+     * seu objetivo é CONSUMIR (PUT) elementos.
+     *
+     * Ela pode ser:
+     *
+     *     List<Number>
+     *     List<Object>
+     *
+     * Como essas listas aceitam objetos Number,
+     * podemos adicionar:
+     *
+     *     target.add(number);
+     *
+     * =========================================================================
+     * PRINCÍPIO GET / PUT (PECS)
+     * =========================================================================
+     *
+     * Source (Producer)  -> ? extends Number
+     * Target (Consumer)  -> ? super Number
+     *
+     * Ou seja:
+     *
+     *     GET  -> extends
+     *     PUT  -> super
+     */
+    public static void copy(List<? extends Number> source,
+                            List<? super Number> target) {
+
+        for (Number number : source) {
+            target.add(number);
+        }
+    }
+
+    //método para imprimir a lista
+    //List<?> => lista de qualquer tipo
+
+    public static void printList(List<?> list) {
+        for (Object obj : list) {
+            System.out.print(obj + " ");
+        }
+        System.out.println();
+    }
+
+
+
 }
