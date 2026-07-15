@@ -117,81 +117,80 @@ public class PrincipioGet_Put {
      */
 
     public static void main(String[] args) {
-        Locale.setDefault(Locale.US);
-        List<Integer> IntList = new ArrayList<>();
-        IntList.add(1);
-        IntList.add(2);
 
-        List<? extends Number> NumberList = IntList;
+        Locale.setDefault(Locale.US);
+
+        // Lista de Number
+        List<Object> objList = new ArrayList<>();
+        objList.add("Dinis");
+        objList.add("Aline");
+
         /*
-         * =========================================================================
-         * COVARIÂNCIA (Covariance)
-         * =========================================================================
-         *
-         * Ocorre quando utilizamos:
-         *
-         *      ? extends Tipo
-         *
-         * A coleção pode PRODUZIR (GET) elementos para leitura,
-         * porém não permite ADICIONAR (PUT) novos elementos.
-         *
-         * Exemplo:
-         *
-         *      List<? extends Shape>
-         *
-         * Podemos fazer:
-         *
-         *      Shape sh = list.get(0);   // OK
-         *
-         * Mas não:
-         *
-         *      list.add(new Circle());   // Erro
-         *
          * =========================================================================
          * CONTRAVARIÂNCIA (Contravariance)
          * =========================================================================
          *
-         * Ocorre quando utilizamos:
+         * List<? super Integer>
          *
-         *      ? super Tipo
+         * Aceita uma lista de Integer ou de qualquer uma de suas superclasses.
          *
-         * A coleção pode CONSUMIR (PUT) elementos,
-         * porém, ao recuperar um elemento (GET),
-         * o compilador garante apenas Object.
+         * Neste exemplo:
          *
-         * Exemplo:
+         *      Integer
+         *          ▲
+         *          │
+         *       Number
+         *          ▲
+         *          │
+         *        Object
          *
-         *      List<? super Integer>
-         *
-         * Podemos fazer:
-         *
-         *      list.add(10);             // OK
-         *
-         * Porém:
-         *
-         *      Object obj = list.get(0); // OK
-         *
-         * Não podemos assumir:
-         *
-         *      Integer n = list.get(0);  // Erro
-         *
-         * =========================================================================
-         * RESUMO
-         * =========================================================================
-         *
-         * Covariance      -> ? extends
-         *                    ✔ GET
-         *                    ✘ PUT
-         *
-         * Contravariance  -> ? super
-         *                    ✔ PUT
-         *                    ✘ GET (como tipo específico)
+         * Como Number é superclasse de Integer,
+         * podemos fazer:
          */
-        Number x = NumberList.get(0); //pode acessar os elementos
+
+        /*
+         * ? super Number significa:
+         *
+         * Aceita uma referência para uma lista cujo tipo seja
+         * Number ou qualquer uma de suas superclasses.
+         *
+         * Exemplos válidos:
+         *
+         *     List<Number>
+         *     List<Object>
+         *
+         * Exemplo inválido:
+         *
+         *     List<Integer> // Integer é subclasse de Number
+         */
+        List<? super Number> myNums = objList;
+
+        // PUT (Adicionar) -> PERMITIDO
+        myNums.add(30); //-> qualquer valor do tipo Number(ex:30) ou objetos de um super tipo de number, mas não pode acessar os objets da lista
+        myNums.add(40.5);
 
 
-      //  NumberList.add(20); // mas não pode adicionar nada na lista(da erro de compilação)
+        // pode acessar o elemento da lista e tentar guardar
+        // numa variável do tipo Number os objets da lista(da erro de compilação
+        //Number x = myNums.get(0);  erro
 
+        // GET (Ler) -> Apenas Object é garantido
+        Object obj = myNums.get(0);
 
+        System.out.println(obj);
+
+        /*
+         * Isto NÃO é permitido:
+         *
+         * Integer x = list.get(0); // Erro
+         *
+         * porque o compilador não sabe se a lista real é:
+         *
+         *      List<Integer>
+         *      List<Number>
+         *      List<Object>
+         *
+         * Portanto, ele garante apenas Object.
+         */
     }
 }
