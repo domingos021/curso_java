@@ -200,6 +200,11 @@ public class Curinga_delimitado {
      * =========================================================================
      *
      * List<? extends Shape_curing>
+
+     * Shape_curring => tipo mais generico
+
+     * ou seja <? extends (algum tipo, classe ou tipos nativos(int,double))
+     * *algo de qualquer tipo mas que seja subtipo de =>((algum tipo, classe ou tipos nativos(int,double))
      *
      * ? extends Shape_curing significa:
      *
@@ -227,7 +232,47 @@ public class Curinga_delimitado {
      *
      * Ao final, o método retorna a soma das áreas de todas
      * as figuras presentes na lista.
+     * *
+
      */
+
+    /*
+     * *CONCLUSÃO
+     * ? extends Tipo
+     *
+     * significa:
+     *
+     * "Aceita qualquer subtipo do tipo informado."
+     *
+     * O tipo informado pode ser uma classe ou uma interface.
+     *
+     * Exemplos:
+     *
+     *     ? extends Shape
+     *     ? extends Number
+     *     ? extends Comparable
+     *
+     * Assim, o método poderá receber listas como:
+     *
+     *     List<Circle>        // Circle extends Shape
+     *     List<Rectangle>     // Rectangle extends Shape
+     *     List<Integer>       // Integer extends Number
+     *     List<Double>        // Double extends Number
+     *
+     * Observação:
+     * Generics trabalham apenas com tipos de referência.
+     * Portanto, não podemos utilizar tipos primitivos como:
+     *
+     *     int
+     *     double
+     *     char
+     *
+     * Devemos utilizar seus wrappers:
+     *
+     *     Integer
+     *     Double
+     *     Character
+     *******************************************************/
     public static double totalArea(List<? extends Shape_curing> list) {
         /*
          * Não é permitido adicionar elementos em uma lista definida como:
