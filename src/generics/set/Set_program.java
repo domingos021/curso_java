@@ -1,9 +1,7 @@
 package generics.set;
-
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Set;
-import java.util.TreeSet;
 
 public class Set_program {
     /*
@@ -30,20 +28,18 @@ public class Set_program {
         Locale.setDefault(Locale.US);
 
         /*
-         * Cria um TreeSet para armazenar elementos únicos do tipo String.
+         * Cria um LinkedHashSet para armazenar elementos únicos do tipo String.
          *
-         * Características do TreeSet:
+         * Características do LinkedHashSet:
          * - Não permite elementos duplicados.
-         * - Mantém os elementos sempre ordenados.
-         * - A ordenação segue a ordem natural dos elementos
-         *   (ou um Comparator, quando informado).
-         * - É mais lento que o HashSet, pois precisa manter
-         *   a estrutura ordenada.
+         * - Mantém a ordem em que os elementos foram inseridos.
+         * - É um pouco mais lento que o HashSet, pois precisa
+         *   manter a ordem de inserção.
          *
-         * É a implementação mais indicada quando a ordem
-         * dos elementos é importante.
+         * É a implementação mais indicada quando precisamos
+         * preservar a ordem de inserção dos elementos.
          */
-        Set<String> set = new TreeSet<>();
+        Set<String> set = new LinkedHashSet<>();
 
         // Adiciona elementos ao conjunto.
         // Se um elemento já existir, ele não será adicionado novamente.
@@ -51,8 +47,7 @@ public class Set_program {
         set.add("Tablet");
         set.add("Notebook");
         set.add("Smartphone");
-        set.add("Tablet01");
-        set.remove("Tablet01");
+        set.remove("Tablet");
 
         // Verifica se o elemento "Tv" está presente no conjunto.
         // Retorna true se existir e false caso contrário.
@@ -61,16 +56,16 @@ public class Set_program {
         /*
          * Percorre todos os elementos do conjunto.
          *
-         * Como estamos utilizando um TreeSet, os elementos
-         * serão exibidos em ordem alfabética.
+         * Como estamos utilizando um LinkedHashSet,
+         * os elementos serão exibidos na mesma ordem
+         * em que foram inseridos.
          *
          * Exemplo de saída:
-         *  Notebook   → N
-         * Smartphone → S
-         * Tablet     → T
-         * Tv         → T
-         * *Comparando
-         * *N < S < T
+         * true
+         * Tv
+         * Tablet
+         * Notebook
+         * Smartphone
          */
         for (String s : set) {
             System.out.println(s);
