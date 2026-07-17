@@ -47,11 +47,36 @@ public class Set_program {
         set.add("Tablet");
         set.add("Notebook");
         set.add("Smartphone");
+
+      // Remove um elemento específico do conjunto.
         set.remove("Tablet");
 
-        // Verifica se o elemento "Tv" está presente no conjunto.
-        // Retorna true se existir e false caso contrário.
-        System.out.println(set.contains("Tv"));
+       // Adiciona um novo elemento.
+        set.add("Carro");
+
+        // Remove todos os elementos com mais de 5 caracteres.
+        set.removeIf(x -> x.length() > 5);
+
+       // Remove todos os elementos cuja segunda letra seja 'v'.
+        set.removeIf(x -> x.length() > 1 && x.charAt(1) == 'v');
+
+     // Verifica se o elemento "Tv" está presente no conjunto.
+        System.out.println("Existe TV no conjunto? " + set.contains("Tv"));
+
+     // Verifica se o conjunto está vazio.
+        System.out.println(set.isEmpty());
+
+     // Retorna a quantidade de elementos armazenados.
+        System.out.println(set.size());
+
+     // Exibe todos os elementos do conjunto.
+        System.out.println(set);
+
+     // Remove todos os elementos do conjunto.
+        set.clear();
+
+     // Verifica novamente se o conjunto está vazio.
+        System.out.println(" existe elemento no conjunto? " + set.isEmpty()); //true/false
 
         /*
          * Percorre todos os elementos do conjunto.
