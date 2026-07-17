@@ -3,6 +3,7 @@ package generics.set;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class Set_program {
     /*
@@ -29,40 +30,47 @@ public class Set_program {
         Locale.setDefault(Locale.US);
 
         /*
-         * Cria um HashSet para armazenar elementos únicos do tipo String.
+         * Cria um TreeSet para armazenar elementos únicos do tipo String.
          *
-         * Características do HashSet:
+         * Características do TreeSet:
          * - Não permite elementos duplicados.
-         * - Oferece inserção, remoção e busca muito rápidas.
-         * - Não garante a ordem de exibição dos elementos.
+         * - Mantém os elementos sempre ordenados.
+         * - A ordenação segue a ordem natural dos elementos
+         *   (ou um Comparator, quando informado).
+         * - É mais lento que o HashSet, pois precisa manter
+         *   a estrutura ordenada.
          *
-         * É a implementação mais indicada quando a ordem dos elementos
-         * não é importante.
+         * É a implementação mais indicada quando a ordem
+         * dos elementos é importante.
          */
-        Set<String> set = new HashSet<>();
+        Set<String> set = new TreeSet<>();
 
         // Adiciona elementos ao conjunto.
         // Se um elemento já existir, ele não será adicionado novamente.
         set.add("Tv");
         set.add("Tablet");
         set.add("Notebook");
-        set.remove("Tv");
+        set.add("Smartphone");
+        set.add("Tablet01");
+        set.remove("Tablet01");
 
         // Verifica se o elemento "Tv" está presente no conjunto.
         // Retorna true se existir e false caso contrário.
-        System.out.println(set.contains("Tv")); //false
+        System.out.println(set.contains("Tv"));
 
         /*
          * Percorre todos os elementos do conjunto.
          *
-         * Como estamos utilizando um HashSet, a ordem de exibição
-         * pode ser diferente da ordem em que os elementos foram inseridos.
+         * Como estamos utilizando um TreeSet, os elementos
+         * serão exibidos em ordem alfabética.
          *
          * Exemplo de saída:
-         * true
-         * Tv
-         * Notebook
-         * Tablet
+         *  Notebook   → N
+         * Smartphone → S
+         * Tablet     → T
+         * Tv         → T
+         * *Comparando
+         * *N < S < T
          */
         for (String s : set) {
             System.out.println(s);
