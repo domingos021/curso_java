@@ -5,42 +5,43 @@ package progracaofuncional_lambda.apps;
  * COMPARATOR
  * ============================================================
  *
- * Comparator é uma interface funcional utilizada para definir
- * critérios personalizados de ordenação.
+ * Comparator é uma interface funcional da linguagem Java
+ * utilizada para definir um critério de comparação entre
+ * dois objetos.
  *
- * Diferentemente do Comparable, onde a própria classe define
- * sua ordem natural através do método compareTo(), o Comparator
- * permite criar quantas regras de ordenação forem necessárias,
- * sem alterar a classe original.
+ * Diferentemente da interface Comparable, onde a própria
+ * classe define sua ordem natural através do método compareTo(),
+ * o Comparator permite criar quantas regras de ordenação
+ * forem necessárias, sem modificar a classe original.
+ *
+ * Em outras palavras:
  *
  * Comparable
  * -------------------------
- * A regra fica dentro da classe.
+ * A própria classe define sua ordem natural.
+ *
+ * Exemplo:
  *
  * Product
- *      │
- *      ▼
+ *     │
+ *     ▼
  * compareTo()
  *
  * Comparator
  * -------------------------
- * A regra fica em uma classe externa.
+ * Uma classe externa define a forma de ordenação.
  *
  * Product
- *      │
- *      ▼
+ *     │
+ *     ▼
  * DefaultComparator
- *      │
- *      ▼
+ *     │
+ *     ▼
  * compare()
  *
- * Dessa forma, o mesmo objeto pode ser ordenado:
- *
- * ✔ pelo nome;
- * ✔ pelo preço;
- * ✔ pela quantidade;
- * ✔ pela categoria;
- * ✔ ou qualquer outro critério.
+ * Isso torna o código muito mais flexível, pois
+ * o mesmo objeto pode ser ordenado de diversas formas,
+ * como por nome, preço, quantidade, categoria etc.
  */
 
 import progracaofuncional_lambda.DefaultComparator;
@@ -49,26 +50,29 @@ import progracaofuncional_lambda.entities.Product;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Comparator01 {
+/*
+ * ============================================================
+ * CLASSE COMPARATOR
+ * ============================================================
+ *
+ * Demonstra a utilização da interface Comparator para
+ * ordenar uma lista de objetos Product.
+ *
+ * Neste exemplo, o critério de ordenação está definido
+ * na classe DefaultComparator.
+ */
+public class Comparator {
 
     public static void main(String[] args) {
 
         /*
-         * ============================================================
-         * CRIAÇÃO DA LISTA
-         * ============================================================
-         *
-         * A lista armazenará objetos Product.
+         * Cria uma lista que armazenará objetos Product.
          */
         List<Product> lista = new ArrayList<>();
 
 
         /*
-         * ============================================================
-         * ADICIONANDO PRODUTOS
-         * ============================================================
-         *
-         * Cada objeto Product é armazenado dentro da lista.
+         * Adicionando alguns produtos na lista.
          */
         lista.add(new Product("Mouse Gamer Logitech", 250.00));
         lista.add(new Product("Notebook Dell Inspiron", 4500.00));
@@ -87,19 +91,16 @@ public class Comparator01 {
          *
          * Sua função é reorganizar os elementos da lista.
          *
-         * Entretanto, o método sort() NÃO sabe como comparar
+         * Entretanto, o método sort() não sabe como comparar
          * objetos Product.
          *
-         * Por isso, precisamos fornecer um Comparator.
-         *
-         * Neste exemplo estamos passando um objeto da classe
+         * Por isso, passamos um objeto da classe
          * DefaultComparator.
          *
-         * Essa classe implementa a interface Comparator<Product>
-         * e contém o método compare(), responsável por informar:
-         *
-         * • quem vem primeiro;
-         * • quem vem depois.
+         * Essa classe implementa a interface
+         * Comparator<Product> e possui o método compare(),
+         * responsável por informar qual objeto deve vir
+         * antes do outro.
          *
          * Fluxo:
          *
@@ -122,20 +123,12 @@ public class Comparator01 {
 
 
         /*
-         * ============================================================
-         * EXIBINDO A LISTA ORDENADA
-         * ============================================================
+         * Percorre toda a lista já ordenada
+         * imprimindo seus elementos.
          *
-         * Neste momento a lista já foi reorganizada
-         * pelo método sort().
-         *
-         * O for percorre todos os elementos da lista
-         * exibindo-os na nova ordem definida pelo
-         * Comparator.
+         * O método toString() da classe Product
+         * é chamado automaticamente para cada objeto.
          */
-        System.out.println("LISTA ORDENADA");
-        System.out.println("-----------------------------");
-
         for (Product p : lista) {
             System.out.println(p);
         }
