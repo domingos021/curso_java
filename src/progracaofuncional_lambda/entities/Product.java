@@ -120,6 +120,33 @@ public class Product {
         this.price = this.price * 1.10;
     }
 
+    /*
+     * ============================================================
+     * MÉTODOS PARA FUNCTION<T, R> (RECEBEM T, RETORNAM R)
+     * ============================================================
+     *
+     * Métodos utilitários para mapeamento/transformação.
+     * Recebem um objeto e RETORNAM um novo valor (outro tipo ou valor alterado).
+     *
+     * Estrutura esperada pela Function:
+     *   - Estático:   R nome(Product p)
+     *   - Instância:  R nome()
+     */
+
+    // Método estático: recebe um Product e retorna o nome em maiúsculas
+    // Utilização via Method Reference: Product::staticUpperCaseName
+    public static String staticUpperCaseName(Product p) {
+        System.out.println("[FUNCTION - ESTÁTICO] Mapeando nome para maiúsculas: " + p.getName());
+        return p.getName().toUpperCase();
+    }
+
+    // Método de instância: acessa o 'this.name' e retorna em maiúsculas
+    // Utilização via Method Reference: Product::nonStaticUpperCaseName
+    public String nonStaticUpperCaseName() {
+        System.out.println("[FUNCTION - INSTÂNCIA] Mapeando nome para maiúsculas: " + this.name);
+        return this.name.toUpperCase();
+    }
+
 
     /*
      * ============================================================

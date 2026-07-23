@@ -169,7 +169,7 @@ package progracaofuncional_lambda.interface_funcionais.apps;
 
 import generals_utils.utils.Leitor;
 import progracaofuncional_lambda.entities.Product;
-import progracaofuncional_lambda.interface_funcionais.util.ProductPredicate;
+import progracaofuncional_lambda.interface_funcionais.interfaces.util.ProductPredicate;
 
 import java.util.ArrayList;
 import java.util.List;

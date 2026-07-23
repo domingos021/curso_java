@@ -1,4 +1,4 @@
-package progracaofuncional_lambda.interface_funcionais.util;
+package progracaofuncional_lambda.interface_funcionais.interfaces.util;
 
 import progracaofuncional_lambda.entities.Product;
 

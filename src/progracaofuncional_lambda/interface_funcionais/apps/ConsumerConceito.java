@@ -176,7 +176,7 @@ package progracaofuncional_lambda.interface_funcionais.apps;
 */
 
 import progracaofuncional_lambda.entities.Product;
-import progracaofuncional_lambda.interface_funcionais.util.ConsumerPriceUpdate;
+import progracaofuncional_lambda.interface_funcionais.interfaces.util.ConsumerPriceUpdate;
 
 import java.util.ArrayList;
 import java.util.List;
