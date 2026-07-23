@@ -46,75 +46,101 @@ public class Product {
     }
 
     /*
-     * Retorna o nome do produto.
+     * Getters e Setters
      */
     public String getName() {
         return name;
     }
 
-    /*
-     * Altera o nome do produto.
-     */
     public void setName(String name) {
         this.name = name;
     }
 
-    /*
-     * Retorna o preço do produto.
-     */
     public Double getPrice() {
         return price;
     }
 
-    /*
-     * Altera o preço do produto.
-     */
     public void setPrice(Double price) {
         this.price = price;
     }
 
+
     /*
      * ============================================================
-     * MÉTODOS AUXILIARES PARA PREDICATE (METHOD REFERENCES)
+     * MÉTODOS PARA PREDICATE<T> (RETORNAM BOOLEAN)
      * ============================================================
      *
-     * Ambos os métodos fazem a mesma verificação lógica,
-     * mas com assinaturas e escopos diferentes:
+     * Métodos utilitários para uso em filtros, removeIf e streams.
+     * Retornam true ou false.
+     *
+     * Estrutura esperada pelo Predicate:
+     *   - Estático:   boolean nome(Product p)
+     *   - Instância:  boolean nome()
      */
 
-    // Método estático: trabalha com os dados do objeto passado via parâmetro.
+    // Método estático: recebe um produto como parâmetro
     // Utilização via Method Reference: Product::staticProductPredicate
     public static boolean staticProductPredicate(Product p) {
+        System.out.println("[PREDICATE - ESTÁTICO] Testando condição para: " + p.getName());
         return p.getPrice() != null && p.getPrice() >= 500.0;
     }
 
-    // Método comum (instância): trabalha com os dados da própria classe (this).
+    // Método comum (instância): trabalha direto com o 'this'
     // Utilização via Method Reference: Product::nonstaticProductPredicate
     public boolean nonstaticProductPredicate() {
-        return this.price != null
-                && (this.price == 2000.0 || this.price < 500.0);
+        System.out.println("[PREDICATE - INSTÂNCIA] Testando condição para: " + this.name);
+        return this.price != null && (this.price == 2000.0 || this.price < 500.0);
     }
 
 
     /*
-     * Retorna uma representação textual do objeto.
+     * ============================================================
+     * MÉTODOS PARA CONSUMER<T> (RETORNAM VOID)
+     * ============================================================
+     *
+     * Métodos utilitários para uso no forEach.
+     * Executam uma ação de alteração/processamento e NÃO retornam nada (void).
+     *
+     * Estrutura esperada pelo Consumer:
+     *   - Estático:   void nome(Product p)
+     *   - Instância:  void nome()
+     */
+
+    // Método estático: recebe o objeto por parâmetro e altera o preço em 10%
+    // Utilização via Method Reference: Product::staticPriceUpdate
+    public static void staticPriceUpdate(Product p) {
+        System.out.println("[CONSUMER - ESTÁTICO] Reajustando preço de: " + p.getName());
+        p.setPrice(p.getPrice() * 1.10);
+    }
+
+    // Método de instância: altera o próprio 'this.price' em 10%
+    // Utilização via Method Reference: Product::nonStaticPriceUpdate
+    public void nonStaticPriceUpdate() {
+        System.out.println("[CONSUMER - INSTÂNCIA] Reajustando preço de: " + this.name);
+        this.price = this.price * 1.10;
+    }
+
+
+    /*
+     * ============================================================
+     * MÉTODOS SOBRESCRITOS (TOSTRING, EQUALS, HASHCODE)
+     * ============================================================
+     */
+
+    /*
+     * Retorna uma representação textual do objeto com preço formatado.
      */
     @Override
     public String toString() {
         return "Product{" +
                 "name='" + name + '\'' +
-                ", price=" + price +
+                ", price=" + String.format("%.2f", price) +
                 '}';
     }
 
     /*
-     * ============================================================
-     * EQUALS E HASHCODE
-     * ============================================================
-     *
      * Garante que dois objetos com os mesmos valores sejam
-     * considerados iguais em buscas, remoções (ex: removeIf)
-     * e em coleções como Set e Map.
+     * considerados iguais em buscas, remoções e coleções Set/Map.
      */
     @Override
     public boolean equals(Object o) {

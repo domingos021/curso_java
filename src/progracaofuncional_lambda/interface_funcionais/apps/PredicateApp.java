@@ -1,463 +1,350 @@
 package progracaofuncional_lambda.interface_funcionais.apps;
 
+/*
+ * ============================================================
+ * PREDICATE<T>
+ * ============================================================
+ *
+ * Predicate é uma Interface Funcional pertencente ao pacote:
+ *
+ *      java.util.function
+ *
+ * Ela representa uma função que:
+ *
+ *      recebe um objeto
+ *             │
+ *             ▼
+ *      executa uma condição
+ *             │
+ *             ▼
+ *      retorna true ou false.
+ *
+ *
+ * ============================================================
+ * MÉTODO ABSTRATO
+ * ============================================================
+ *
+ * Como toda Interface Funcional, Predicate possui
+ * apenas um único método abstrato.
+ *
+ * boolean test(T t);
+ *
+ *
+ * Estrutura:
+ *
+ * Predicate<T>
+ *
+ * recebe:
+ *
+ *      T
+ *
+ * retorna:
+ *
+ *      boolean
+ *
+ *
+ * ============================================================
+ * QUANDO UTILIZAR?
+ * ============================================================
+ *
+ * Utilizamos Predicate quando desejamos testar uma condição
+ * sobre um objeto para tomar uma decisão booleana.
+ *
+ * Exemplos:
+ *
+ * • filtrar coleções (removeIf, filter);
+ * • validar atributos de um objeto;
+ * • verificar regras de negócio (ex: preço >= valor);
+ * • verificar estados (ex: está ativo, está em estoque).
+ *
+ *
+ * ============================================================
+ * IMPLEMENTAÇÃO TRADICIONAL
+ * ============================================================
+ *
+ * Antes do Java 8 era comum criar uma classe
+ * separada:
+ *
+ * public class ProductPredicate
+ *          implements Predicate<Product>
+ *
+ *
+ * Depois implementar:
+ *
+ * public boolean test(Product p){
+ *      return p.getPrice() >= 500.0;
+ * }
+ *
+ *
+ * ============================================================
+ * CLASSE ANÔNIMA
+ * ============================================================
+ *
+ * Também era possível utilizar:
+ *
+ * new Predicate<Product>() {
+ *
+ *      @Override
+ *      public boolean test(Product p){
+ *          return p.getPrice() >= 500.0;
+ *      }
+ * }
+ *
+ *
+ * ============================================================
+ * EXPRESSÃO LAMBDA
+ * ============================================================
+ *
+ * A partir do Java 8 podemos escrever:
+ *
+ * p -> p.getPrice() >= 500.0
+ *
+ *
+ * O compilador cria automaticamente um objeto que
+ * implementa Predicate<Product>.
+ *
+ *
+ * ============================================================
+ * DIFERENÇA ENTRE PREDICATE E CONSUMER
+ * ============================================================
+ *
+ * Predicate
+ *
+ * recebe um objeto
+ * retorna boolean
+ *
+ * boolean test(T t);
+ *
+ *
+ * Consumer
+ *
+ * recebe um objeto
+ * não retorna nada
+ *
+ * void accept(T t);
+ *
+ *
+ * ============================================================
+ * EXEMPLOS DE MÉTODOS QUE RECEBEM PREDICATE
+ * ============================================================
+ *
+ * removeIf()
+ *
+ * lista.removeIf(
+ *      p -> p.getPrice() >= 500.0
+ * );
+ *
+ *
+ * filter() (da Stream API)
+ *
+ * lista.stream().filter(
+ *      p -> p.getPrice() >= 500.0
+ * );
+ *
+ *
+ * ============================================================
+ * RESUMO
+ * ============================================================
+ *
+ * Predicate
+ *      Recebe → Retorna boolean
+ *
+ * Consumer
+ *      Recebe → Executa uma ação
+ *
+ * Function
+ *      Recebe → Retorna outro valor
+ *
+ * Supplier
+ *      Não recebe → Retorna um valor
+ *
+ */
+
+/*
+ sintaxe
+ public interface Predicate<T> {
+    boolean test(T t); // recebe um argumento e retorna boolean (true/false)
+ }
+*/
+
 import generals_utils.utils.Leitor;
 import progracaofuncional_lambda.entities.Product;
 import progracaofuncional_lambda.interface_funcionais.util.ProductPredicate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 import java.util.function.Predicate;
 
 public class PredicateApp {
 
     public static void main(String[] args) {
+        Locale.setDefault(Locale.US);
         try (Scanner sc = new Scanner(System.in)) {
 
-            /*
-             * ============================================================
-             * PREDICATE<T>
-             * ============================================================
-             *
-             * Predicate é uma Interface Funcional do pacote
-             * java.util.function.
-             *
-             * Ela representa uma função que:
-             *
-             * recebe um objeto
-             *        |
-             *        ▼
-             * executa uma condição
-             *        |
-             *        ▼
-             * retorna true ou false
-             *
-             *
-             * Método abstrato:
-             *
-             * boolean test(T t);
-             *
-             * ============================================================
-             */
+            // ============================================================
+            // 1ª FORMA: Classe utilitária que implementa Predicate<Product>
+            // ============================================================
+            System.out.println("=================== 1ª FORMA: Predicate em Classe Separada ===================");
+            List<Product> list01 = new ArrayList<>();
+            list01.add(new Product("Tv", 2000.0));
+            list01.add(new Product("Mouse", 150.0));
+            list01.add(new Product("Teclado", 300.0));
+            list01.add(new Product("Notebook", 4500.0));
+            list01.add(new Product("Monitor", 1200.0));
+
+            System.out.println("--- Lista Original ---");
+            list01.forEach(System.out::println);
+
+            // Cria um objeto ProductPredicate que implementa Predicate<Product> e envia para removeIf()
+            list01.removeIf(new ProductPredicate());
+
+            System.out.println("\n--- Após removeIf com ProductPredicate ---");
+            list01.forEach(System.out::println);
 
 
-            List<Product> lista = new ArrayList<>();
+            // ============================================================
+            // 2ª FORMA: Classe Anônima
+            // ============================================================
+            System.out.println("\n=================== 2ª FORMA: Classe Anônima ===================");
+            List<Product> list02 = new ArrayList<>();
+            list02.add(new Product("Celular", 2500.0));
+            list02.add(new Product("Cabo USB", 50.0));
+            list02.add(new Product("Carregador", 120.0));
+            list02.add(new Product("Notebook Gamer", 7000.0));
+
+            System.out.println("--- Lista Original ---");
+            list02.forEach(System.out::println);
+
+            list02.removeIf(new Predicate<Product>() {
+                @Override
+                public boolean test(Product produto) {
+                    return produto.getPrice() < 200.0;
+                }
+            });
+
+            System.out.println("\n--- Após removeIf com Classe Anônima (Preço < 200) ---");
+            list02.forEach(System.out::println);
 
 
-            lista.add(new Product("Tv", 2000.0));
-            lista.add(new Product("Mouse", 150.0));
-            lista.add(new Product("Teclado", 300.0));
-            lista.add(new Product("Notebook", 4500.0));
-            lista.add(new Product("Monitor", 1200.0));
+            // ============================================================
+            // 3ª FORMA: Method Reference (Método ESTÁTICO)
+            // ============================================================
+            System.out.println("\n=================== 3ª FORMA: Method Reference (Método Estático) ===================");
+            List<Product> list03 = new ArrayList<>();
+            list03.add(new Product("TV", 2000.0));
+            list03.add(new Product("Mouse", 150.0));
+            list03.add(new Product("Notebook", 4500.0));
+            list03.add(new Product("Teclado", 300.0));
+
+            System.out.println("--- Lista Original ---");
+            list03.forEach(System.out::println);
+
+            // Passa a referência do método estático Product::staticProductPredicate
+            list03.removeIf(Product::staticProductPredicate);
+
+            System.out.println("\n--- Após removeIf com Método Estático ---");
+            list03.forEach(System.out::println);
 
 
-            System.out.println("========== LISTA ORIGINAL ==========");
+            // ============================================================
+            // 4ª FORMA: Method Reference (Método NÃO Estático / Instância)
+            // ============================================================
+            System.out.println("\n=================== 4ª FORMA: Method Reference (Método de Instância) ===================");
+            List<Product> list04 = new ArrayList<>();
+            list04.add(new Product("TV", 2000.0));
+            list04.add(new Product("Mouse", 150.0));
+            list04.add(new Product("Notebook", 4500.0));
+            list04.add(new Product("Teclado", 300.0));
+            list04.add(new Product("Teclado02", 400.0));
+            list04.add(new Product("Tiled", 1400.0));
 
-            for (Product p : lista) {
-                System.out.println(p);
-            }
-
-
-
-            /*
-             * ============================================================
-             * EVOLUÇÃO DA IMPLEMENTAÇÃO DO PREDICATE
-             * ============================================================
-             *
-             * 1) CLASSE SEPARADA
-             *
-             * Antes do Java 8, poderíamos criar uma classe:
-             *
-             * ProductPredicate implements Predicate<Product>
-             *
-             *
-             * Essa classe implementa o método:
-             *
-             * boolean test(Product p)
-             *
-             *
-             * Ela é equivalente à Lambda:
-             *
-             * p -> p.getPrice() >= 500.0
-             *
-             *
-             * ============================================================
-             */
-
-
-            // Cria um objeto ProductPredicate que implementa Predicate<Product>
-            // e envia esse objeto for removeIf()
-            lista.removeIf(new ProductPredicate());
-
-
-            System.out.println("\n========== APÓS PRODUCTPREDICATE ==========");
-
-            for (Product p : lista) {
-                System.out.println(p);
-            }
-
-
-
-            /*
-             * ============================================================
-             * 2) CLASSE ANÔNIMA
-             * ============================================================
-             *
-             * Outra forma antes do Java 8 era criar uma implementação
-             * diretamente dentro do método.
-             *
-             *
-             * O código abaixo é equivalente a:
-             *
-             * p -> p.getPrice() >= 500.0
-             *
-             */
-
-
-            List<Product> lista2 = new ArrayList<>();
-
-            lista2.add(new Product("Celular", 2500.0));
-            lista2.add(new Product("Cabo USB", 50.0));
-            lista2.add(new Product("Carregador", 120.0));
-            lista2.add(new Product("Notebook Gamer", 7000.0));
-
-
-            System.out.println("\n========== SEGUNDA LISTA ==========");
-            System.out.println(lista2);
-
-
-            lista2.removeIf(
-                    new Predicate<Product>() {
-
-                        @Override
-                        public boolean test(Product produto) {
-
-                            return produto.getPrice() < 200;
-                        }
-                    }
-            );
-
-
-            System.out.println("\n========== APÓS CLASSE ANÔNIMA ==========");
-            System.out.println(lista2);
-
-
-
-            /*
-             * ============================================================
-             * 3) EXPRESSÃO LAMBDA DIRETAMENTE
-             * ============================================================
-             *
-             * A partir do Java 8 podemos substituir toda a estrutura
-             * anterior por uma Expressão Lambda.
-             *
-             *
-             * Não precisamos:
-             *
-             * - criar uma classe;
-             * - criar uma classe anônima;
-             * - implementar manualmente o método test().
-             *
-             *
-             * O compilador cria automaticamente um objeto que
-             * implementa Predicate<Product>.
-             *
-             */
-
-
-            List<Product> lista3 = new ArrayList<>();
-
-            lista3.add(new Product("TV", 2000.0));
-            lista3.add(new Product("Mouse", 150.0));
-            lista3.add(new Product("Notebook", 4500.0));
-            lista3.add(new Product("Teclado", 300.0));
-
-
-            System.out.println("\n========== TERCEIRA LISTA ==========");
-            System.out.println(lista3);
-
-
-            // Lambda implementando o método test() do Predicate
-            lista3.removeIf(
-                    p -> p.getPrice() > 1000
-            );
-
-
-            System.out.println("\n========== APÓS LAMBDA ==========");
-            System.out.println(lista3);
-
-
-
-            /*
-             * ============================================================
-             * COMPARAÇÃO FINAL
-             * ============================================================
-             *
-             * Todas as formas abaixo fazem a mesma coisa:
-             *
-             *
-             * 1) Classe separada:
-             *
-             * lista.removeIf(new ProductPredicate());
-             *
-             *
-             * 2) Classe anônima:
-             *
-             * lista.removeIf(
-             *      new Predicate<Product>() {
-             *
-             *          public boolean test(Product p){
-             *              return p.getPrice() >= 500;
-             *          }
-             *      }
-             * );
-             *
-             *
-             * 3) Lambda:
-             *
-             * lista.removeIf(
-             *      p -> p.getPrice() >= 500
-             * );
-             *
-             *
-             * A diferença está apenas na quantidade de código.
-             *
-             * O comportamento é o mesmo porque todas implementam:
-             *
-             * boolean test(Product p);
-             *
-             * ============================================================
-             */
-
-
-            List<Product> lista4 = new ArrayList<>();
-
-            lista4.add(new Product("TV", 2000.0));
-            lista4.add(new Product("Mouse", 150.0));
-            lista4.add(new Product("Notebook", 4500.0));
-            lista4.add(new Product("Teclado", 300.0));
-
-
-            System.out.println("\n========== TERCEIRA LISTA ==========");
-            for (Product p : lista4) {
-                System.out.println(p);
-            }
-
-
-
-            /*
-             * ============================================================
-             * USANDO MÉTODO DA CLASSE PRODUCT
-             * ============================================================
-             *
-             * A Lambda recebe cada Product da lista.
-             *
-             * Depois chama o método:
-             *
-             * p.expensiveProduct()
-             *
-             *
-             * Equivale a:
-             *
-             * Predicate<Product> predicate =
-             *
-             *      p -> p.expensiveProduct();
-             *
-             */
-
-            lista4.removeIf(
-                    Product::staticProductPredicate
-            );
-
-
-            System.out.println("\n========== APÓS USAR MÉTODO DO PRODUCT ==========");
-            for (Product p : lista4) {
-                System.out.println(p);
-            }
-
-
-            /*
-             * ============================================================
-             * USANDO MÉTODO COMUM (DE INSTÂNCIA / NÃO ESTÁTICO) DO PRODUCT
-             * ============================================================
-             *
-             * Aqui utilizamos Method Reference apontando para um método
-             * comum (que não possui a palavra-chave 'static').
-             *
-             * Sintaxe:
-             *
-             * Product::nonstaticProductPredicate
-             *
-             * Como funciona internamente?
-             *
-             * O Java entende que o objeto 'p' da lista será a própria
-             * instância que chamará o método:
-             *
-             * p -> p.nonstaticProductPredicate()
-             */
-
-            List<Product> lista5 = new ArrayList<>();
-
-            lista5.add(new Product("TV", 2000.0));
-            lista5.add(new Product("Mouse", 150.0));
-            lista5.add(new Product("Notebook", 4500.0));
-            lista5.add(new Product("Teclado", 300.0));
-            lista5.add(new Product("Teclado02", 400.0));
-
-            System.out.println("\n========== QUARTA LISTA (ANTES DO MÉTODO COMUM) ==========");
-            for (Product p : lista5) {
-                System.out.println(p);
-            }
-
-            lista5.add(new Product("Tiled", 1400.0));
-
-            System.out.println("\n========== LISTA COM NOVO ITEM (TILED) ==========");
-            for (Product p : lista5) {
-                System.out.println(p);
-            }
+            System.out.println("--- Lista Original ---");
+            list04.forEach(System.out::println);
 
             // Executa o método não estático 'nonstaticProductPredicate' em cada elemento
-            lista5.removeIf(
-                    Product::nonstaticProductPredicate
-            );
+            list04.removeIf(Product::nonstaticProductPredicate);
 
-            System.out.println("\n========== APÓS USAR MÉTODO COMUM (NÃO ESTÁTICO) ==========");
-            for (Product p : lista5) {
-                System.out.println(p);
-            }
+            System.out.println("\n--- Após removeIf com Método de Instância ---");
+            list04.forEach(System.out::println);
 
 
-            /*
-             * ============================================================
-             * 4) OUTRAS FORMAS DE USAR PREDICATE E METHOD REFERENCE
-             * ============================================================
-             *
-             * Abaixo estão demonstradas todas as formas alternativas
-             * de passar um Predicate para o método removeIf().
-             */
+            // ============================================================
+            // 5ª FORMA: Expressão Lambda declarada numa Variável
+            // ============================================================
+            System.out.println("\n=================== 5ª FORMA: Lambda em Variável ===================");
+            List<Product> list05 = new ArrayList<>();
+            list05.add(new Product("TV Smart", 2000.0));
+            list05.add(new Product("Fone Bluetooth", 80.0));
+            list05.add(new Product("Mouse Gamer", 250.0));
+            list05.add(new Product("Cadeira Gamer", 1200.0));
+            list05.add(new Product("Notebook Dell", 4500.0));
 
-            List<Product> listaExemplo = new ArrayList<>();
-            listaExemplo.add(new Product("Fone de Ouvido", 80.0));
-            listaExemplo.add(new Product("Webcam", 250.0));
-            listaExemplo.add(new Product("Cadeira Gamer", 1200.0));
-
-            /*
-             * FORMA A: Lambda declarada em uma variável local
-             * Atribui a expressão a uma variável do tipo Predicate<Product>.
-             */
-            Predicate<Product> predVar = p -> p.getPrice() >= 100.0;
-            // listaExemplo.removeIf(predVar);
-
-            /*
-             * FORMA B: Method Reference com Método Estático da Classe Product
-             * Assinatura esperada no Product: public static boolean staticProductPredicate(Product p)
-             */
-            // listaExemplo.removeIf(Product::staticProductPredicate);
-
-            /*
-             * FORMA C: Method Reference com Método NÃO Estático (de Instância) da Classe Product
-             * Assinatura esperada no Product: public boolean nonstaticProductPredicate()
-             * O Java entende automaticamente que deve executar esse método na instância 'p' recebida.
-             */
-            // listaExemplo.removeIf(Product::nonstaticProductPredicate);
-
-            /*
-             * FORMA D: Lambda declarada inline com bloco de código { }
-             * Permite colocar mais lógica antes do return.
-             */
-            // listaExemplo.removeIf(p -> {
-            //     double limite = 500.0;
-            //     return p.getPrice() > limite;
-            // });
-
-            /*
-             * FORMA E: Composição de Predicates (Inversão / Negação com .negate())
-             * Remove os produtos que NÃO atendem à condição (inverte true <-> false).
-             */
-            // Predicate<Product> ehBarato = p -> p.getPrice() < 200.0;
-            // listaExemplo.removeIf(ehBarato.negate()); // Remove os que NÃO são baratos (ou seja, preço >= 200.0)
-
-            /*
-             * FORMA F: Composição de Predicates (E Lógico com .and() / OU Lógico com .or())
-             * Permite combinar duas ou mais condições funcionais.
-             */
-            // Predicate<Product> precoAlto = p -> p.getPrice() >= 500.0;
-            // Predicate<Product> nomeComC = p -> p.getName().startsWith("C");
-            // listaExemplo.removeIf(precoAlto.and(nomeComC)); // Remove se preço >= 500 E nome começa com 'C'
-
-
-            /*
-             * ============================================================
-             * EXPRESSÃO LAMBDA DECLARADA EM VARIÁVEL (PREDICADO)
-             * ============================================================
-             *
-             * Aqui a lógica de filtragem é atribuída explicitamente a
-             * uma variável do tipo Predicate<Product>.
-             *
-             * Vantagem: Permite reutilizar a mesma regra de remoção
-             * em diversas partes do código ou compor com outros predicados.
-             */
-            List<Product> listaTestePreco = new ArrayList<>();
-
-            listaTestePreco.add(new Product("TV Smart", 2000.0));
-            listaTestePreco.add(new Product("Fone Bluetooth", 80.0));
-            listaTestePreco.add(new Product("Mouse Gamer", 250.0));
-            listaTestePreco.add(new Product("Cadeira Gamer", 1200.0));
-            listaTestePreco.add(new Product("Notebook Dell", 4500.0));
-
-
-            System.out.println("\n========== LISTA ANTES (PREDICADO EM VARIÁVEL) ==========");
-            for (Product p : listaTestePreco) {
-                System.out.println(p);
-            }
+            System.out.println("--- Lista Original ---");
+            list05.forEach(System.out::println);
 
             System.out.println();
-            Double valor = Leitor.lerNumeroDouble(sc, "Digite um valor preço: ");
+            Double valorInformado = Leitor.lerNumeroDouble(sc, "Digite um valor de preço limite para remoção: ");
 
-            // Declara a expressão e armazena na variável 'predVar2'
-            //Predicate<Product> predVar2 = p -> p.getPrice() >= valor; //IMPORTANDO: declaração da expressão lambda
+            // Declara a expressão e armazena na variável 'predVar'
+            Predicate<Product> predVar = p -> p.getPrice() >= valorInformado;
 
             // Passa a variável de predicado para o método removeIf()
-            //listaTestePreco.removeIf(predVar2); IMPORTANTE: uso da variável Expressão lambda declarada
+            list05.removeIf(predVar);
+
+            System.out.println("\n--- Após removeIf com Lambda em Variável ---");
+            list05.forEach(System.out::println);
+
+
+            // ============================================================
+            // 6ª FORMA: Expressão Lambda Inline (Direta no removeIf)
+            // ============================================================
+            System.out.println("\n=================== 6ª FORMA: Lambda Inline (A mais comum no dia a dia) ===================");
+            List<Product> list06 = new ArrayList<>();
+            list06.add(new Product("TV Smart", 2000.0));
+            list06.add(new Product("Fone Bluetooth", 80.0));
+            list06.add(new Product("Mouse Gamer", 250.0));
+            list06.add(new Product("Cadeira Gamer", 1200.0));
+            list06.add(new Product("Notebook Dell", 4500.0));
+
+            System.out.println("--- Lista Original ---");
+            list06.forEach(System.out::println);
+
+            // A Lambda abaixo implementa o método test(Product p) diretamente no parâmetro
+            list06.removeIf(p -> p.getPrice() >= 1000.0);
+
+            System.out.println("\n--- Após removeIf com Lambda Inline (Preço >= 1000.0) ---");
+            list06.forEach(System.out::println);
+
+
+            // ============================================================
+            // OUTRAS FORMAS DE USAR PREDICATE (EXEMPLOS AVANÇADOS)
+            // ============================================================
             /*
-             * ============================================================
-             * EXPRESSÃO LAMBDA INLINE (PREDICATE)
-             * ============================================================
+             * FORMA A: Lambda declarada inline com bloco de código { }
+             * Permite colocar mais lógica antes do return.
              *
-             * Não é obrigatório criar uma variável Predicate.
+             * list06.removeIf(p -> {
+             *     double limite = 500.0;
+             *     return p.getPrice() > limite;
+             * });
              *
-             * Podemos passar a Expressão Lambda diretamente
-             * para o método removeIf().
+             * FORMA B: Composição de Predicates (Inversão / Negação com .negate())
+             * Remove os produtos que NÃO atendem à condição (inverte true <-> false).
              *
-             * O compilador cria automaticamente um objeto que
-             * implementa Predicate<Product>.
+             * Predicate<Product> ehBarato = p -> p.getPrice() < 200.0;
+             * list06.removeIf(ehBarato.negate()); // Remove os que NÃO são baratos
              *
-             * A Lambda abaixo implementa o método:
+             * FORMA C: Composição de Predicates (E Lógico com .and() / OU Lógico com .or())
+             * Permite combinar duas ou mais condições funcionais.
              *
-             * boolean test(Product p){
-             *      return p.getPrice() >= valor;
-             * }
-             *
-             * Para cada objeto Product da lista:
-             *
-             * true  -> remove o produto
-             * false -> mantém o produto
-             *
+             * Predicate<Product> precoAlto = p -> p.getPrice() >= 500.0;
+             * Predicate<Product> nomeComC = p -> p.getName().startsWith("C");
+             * list06.removeIf(precoAlto.and(nomeComC)); // Remove se preço >= 500 E nome começa com 'C'
              */
 
-            listaTestePreco.removeIf(
-                    p -> p.getPrice() >= valor
-            );
-
-
-
-
-            System.out.println("\n========== LISTA DEPOIS (REMOVIDOS PREÇOS >= 1000) ==========");
-            for (Product p : listaTestePreco) {
-                System.out.println(p);
-            }
-
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("ERRO: " + e.getMessage());
         }
     }
@@ -465,7 +352,7 @@ public class PredicateApp {
 
 /*
  * ============================================================
- * RESUMO DAS 5 FORMAS DE IMPLEMENTAR PREDICATE<T>
+ * RESUMO DAS FORMAS DE IMPLEMENTAR PREDICATE<T>
  * ============================================================
  *
  * 1) Classe Concreta Separada:
@@ -477,14 +364,18 @@ public class PredicateApp {
  *        public boolean test(Product p) { return p.getPrice() >= 100; }
  *    });
  *
- * 3) Expressão Lambda Direta (Inline):
- *    lista.removeIf(p -> p.getPrice() >= 100);
- *
- * 4) Method Reference (Método Estático):
+ * 3) Method Reference (Método Estático):
  *    lista.removeIf(Product::staticProductPredicate);
  *
- * 5) Method Reference (Método de Instância / Comum / Não Estático):
+ * 4) Method Reference (Método de Instância / Comum / Não Estático):
  *    lista.removeIf(Product::nonstaticProductPredicate);
+ *
+ * 5) Expressão Lambda em Variável:
+ *    Predicate<Product> pred = p -> p.getPrice() >= 100;
+ *    lista.removeIf(pred);
+ *
+ * 6) Expressão Lambda Direta (Inline):
+ *    lista.removeIf(p -> p.getPrice() >= 100);
  *
  * ============================================================
  */
