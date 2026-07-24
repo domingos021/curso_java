@@ -208,10 +208,27 @@ public class FunctionApp {
              *           ▼  .map(Function<Product, String>)
              *           │
              * Sai:   List<String>    (Nova lista apenas com as Strings/Nomes)
+             * *
+             * *Com preço
+             * *Entra:  List<Product>   (Lista de Objetos Product)
+                           │
+                         * ▼  .map(Product::getPrice)  ---> Function<Product, Double>
+                           │
+             *Sai:    List<Double>    (Nova Lista contendo apenas os Preços)
              */
 
             // A segunda lista transformada é uma lista de String,
             // ou seja, converte a lista de produtos em uma lista de nomes.
+
+            /*
+             * A função .map() percorre a Stream e aplica a função informada no parâmetro para CADA elemento.
+             *
+             * Exemplo de Execução Passo a Passo:
+             *   1. Pega o item 1: (new Product("Notebook Dell", 4500.0))
+             *   2. Aplica a função de transformação -> pega "Notebook Dell" e converte para "NOTEBOOK DELL"
+             *   3. Envia o resultado ("NOTEBOOK DELL") para a nova lista de saída
+             *   4. Repete o processo para todos os demais elementos da lista.
+             */
 
             // O método .map() da Stream API recebe uma Function<T, R>.
             List<String> nomes01 = list01.stream()          // .stream() -> converte a lista original para uma Stream (entra Product)
@@ -284,7 +301,7 @@ public class FunctionApp {
             list05.add(new Product("Mouse Gamer", 180.0));
             list05.add(new Product("Teclado Mecânico", 350.0));
 
-            // Declarando a Function em uma variável explícita
+            // Declarando expressão lambda que e umaFunction em uma variável explícita
             Function<Product, String> funcVar = p -> p.getName().toUpperCase();
 
             List<String> nomes05 = list05.stream()
@@ -343,5 +360,98 @@ public class FunctionApp {
  * 6) Expressão Lambda Direta (Inline):
  *    list.stream().map(p -> p.getName().toUpperCase()).collect(...);
  *
+ * ============================================================
+ *
+ */
+
+
+
+
+/*
+ * ============================================================
+ * RESUMÃO: JEITO ANTIGO (IMPERATIVO) X JEITO NOVO (FUNCIONAL)
+ * ============================================================
+ *
+ * Programação Imperativa (Antiga)  : Foco em COMO fazer (muito for, if, variáveis auxiliares).
+ * Programação Funcional  (Moderna) : Foco em O QUE fazer (Stream API, Lambdas, Method Reference).
+ *
+ * ------------------------------------------------------------
+ * 1. PREDICATE<T> — (Filtros / Condições)
+ * ------------------------------------------------------------
+ * Pergunta: "Este objeto atende a essa regra (true/false)?"
+ * Método Abstrato: boolean test(T t);
+ *
+ * -> JEITO ANTIGO (for tradicional + if):
+ *    List<Product> filtrados = new ArrayList<>();
+ *    for (Product p : lista) {
+ *        if (p.getPrice() >= 500.0) {
+ *            filtrados.add(p);
+ *        }
+ *    }
+ *
+ * -> JEITO NOVO (Functional / removeIf / Stream filter):
+ *    lista.removeIf(p -> p.getPrice() >= 500.0);
+ *    // ou
+ *    List<Product> filtrados = lista.stream()
+ *                                   .filter(p -> p.getPrice() >= 500.0)
+ *                                   .toList();
+ *
+ *
+ * ------------------------------------------------------------
+ * 2. CONSUMER<T> — (Ação / Efeito Colateral)
+ * ------------------------------------------------------------
+ * Pergunta: "O que devo fazer com este objeto sem esperar retorno (void)?"
+ * Método Abstrato: void accept(T t);
+ *
+ * -> JEITO ANTIGO (for-each tradicional):
+ *    for (Product p : lista) {
+ *        p.setPrice(p.getPrice() * 1.10);
+ *        System.out.println(p);
+ *    }
+ *
+ * -> JEITO NOVO (forEach + Lambda ou Method Reference):
+ *    lista.forEach(p -> p.setPrice(p.getPrice() * 1.10));
+ *    lista.forEach(System.out::println);
+ *
+ *
+ * ------------------------------------------------------------
+ * 3. FUNCTION<T, R> — (Mapeamento / Transformação)
+ * ------------------------------------------------------------
+ * Pergunta: "Como transformo/extraio o objeto T em um resultado R?"
+ * Método Abstrato: R apply(T t);
+ *
+ * -> JEITO ANTIGO (extrair lista de preços ou nomes):
+ *    List<String> nomes = new ArrayList<>();
+ *    for (Product p : lista) {
+ *        nomes.add(p.getName().toUpperCase());
+ *    }
+ *
+ * -> JEITO NOVO (.stream() + .map() + Function):
+ *    List<String> nomes = lista.stream()
+ *                              .map(p -> p.getName().toUpperCase())
+ *                              .toList(); // (ou .collect(Collectors.toList()))
+ *
+ *
+ * ------------------------------------------------------------
+ * 4. SUPPLIER<T> — (Provedor / Criador de Dados)
+ * ------------------------------------------------------------
+ * Pergunta: "De onde/como eu gero um novo objeto (não recebe nada -> retorna T)?"
+ * Método Abstrato: T get();
+ *
+ * -> JEITO ANTIGO (instanciação/método direto):
+ *    Product p = new Product("Padrão", 0.0);
+ *
+ * -> JEITO NOVO (Supplier / Lazy Evaluation / Factory):
+ *    Supplier<Product> criador = () -> new Product("Padrão", 0.0);
+ *    Product p = criador.get();
+ *
+ *
+ * ============================================================
+ * RESUMO EM 1 LINHA
+ * ============================================================
+ * • Predicate  -> Recebe T, Retorna boolean  (Testa/Filtra)
+ * • Consumer   -> Recebe T, Retorna void     (Executa Ação)
+ * • Function   -> Recebe T, Retorna R        (Transforma/Extrai)
+ * • Supplier   -> Recebe nada, Retorna T     (Entrega/Gera)
  * ============================================================
  */
