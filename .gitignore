@@ -28,3 +28,13 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+### Configuração local do banco de dados ###
+src/main/resources/db.properties
+
+
+### Maven ###
+target/
+
+### Configuração local do banco ###
+src/main/resources/db.properties
