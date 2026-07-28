@@ -1,146 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
-    Arquivo principal de configuração do Maven.
-
-    O pom.xml (Project Object Model) define:
-    - informações do projeto;
-    - versão do Java;
-    - dependências (bibliotecas);
-    - plugins e configurações do build.
+    Arquivo principal de configuração do Maven (Project Object Model).
+    Define informações do projeto, versão do Java e dependências.
 -->
-
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-         https://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-
-    <!--
-        Define a versão do modelo Maven utilizado.
-        Praticamente todos os projetos Maven usam 4.0.0.
-    -->
+    <!-- Versão padrão do modelo Maven -->
     <modelVersion>4.0.0</modelVersion>
 
-
-    <!--
-        groupId:
-        Identifica o grupo ou organização do projeto.
-
-        Normalmente segue o padrão de domínio invertido.
-
-        Exemplo:
-        com.google
-        com.cursojava
-        br.com.empresa
-    -->
+    <!-- Coordenadas do Projeto (GAV) -->
     <groupId>com.cursojava</groupId>
-
-
-    <!--
-        artifactId:
-        Nome do projeto ou artefato gerado pelo Maven.
-
-        Também será usado no nome do arquivo .jar
-        quando o projeto for empacotado.
-    -->
     <artifactId>programa02</artifactId>
-
-
-    <!--
-        version:
-        Versão atual do projeto.
-
-        SNAPSHOT significa que é uma versão
-        em desenvolvimento.
-    -->
     <version>1.0-SNAPSHOT</version>
 
-
-
-    <!--
-        Properties:
-        Guarda configurações gerais do projeto.
-    -->
+    <!-- Configurações do Compilador Java -->
     <properties>
-
-
-        <!--
-            Define a versão do Java usada para COMPILAR o código.
-
-            Aqui estamos usando Java 25.
-        -->
         <maven.compiler.source>25</maven.compiler.source>
-
-
-        <!--
-            Define a versão do Java que será gerada
-            no bytecode.
-
-            Também estamos usando Java 25.
-        -->
         <maven.compiler.target>25</maven.compiler.target>
-
-
     </properties>
 
-
-
-    <!--
-        Dependencies:
-
-        Aqui ficam todas as bibliotecas externas
-        que o projeto precisa utilizar.
-
-        O Maven baixa automaticamente essas bibliotecas
-        do repositório Maven Central.
-    -->
+    <!-- Dependências (Bibliotecas Externas) -->
     <dependencies>
-
-
         <!--
-            Dependência do MySQL Connector/J.
-
-            Essa biblioteca permite que o Java converse
-            com o banco de dados MySQL usando JDBC.
-
-            Fluxo:
-
-            Java
-              ↓
-            JDBC API
-              ↓
-            MySQL Connector/J
-              ↓
-            MySQL Server
+            MySQL Connector/J: Driver JDBC para comunicação entre Java e MySQL
+            Fluxo: Java -> JDBC API -> MySQL Connector/J -> MySQL Server
         -->
         <dependency>
-
-
-            <!--
-                Organização responsável pela biblioteca.
-            -->
             <groupId>com.mysql</groupId>
-
-
-            <!--
-                Nome da biblioteca.
-            -->
             <artifactId>mysql-connector-j</artifactId>
-
-
-            <!--
-                Versão do Connector utilizado.
-
-                O Maven baixa exatamente essa versão.
-            -->
             <version>9.7.0</version>
-
-
         </dependency>
-
-
     </dependencies>
-
 
 </project>
