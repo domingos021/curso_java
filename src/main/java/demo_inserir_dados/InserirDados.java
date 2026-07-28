@@ -13,88 +13,59 @@ public class InserirDados {
 
         /*
          * Modern Java 8+ API: DateTimeFormatter to define the date pattern (dd/MM/yyyy).
-         * It is an immutable and thread-safe class, unlike the legacy SimpleDateFormat.
          */
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-        // Declaration of connection and statement variables (java.sql package)
-        Connection conn = null;      // Represents an active connection to the database
-        PreparedStatement pstm = null; // Precompiled SQL statement with placeholders (?)
+        // Declaration of connection and statement variables
+        Connection conn = null;
+        PreparedStatement pstmSeller = null;      // First INSERT (Seller)
+        PreparedStatement pstmDepartment = null;  // Second INSERT (Department)
 
         /*
          * Seller data to be inserted.
-         * Centralizing data in local variables makes code maintenance easier
-         * and avoids redundancy in console logs.
          */
-        String name = "Aline Jovete";
-        String email = "alinejovte@gmail.com";
+        String name = "samia Jovete";
+        String email = "samiajovte@gmail.com";
         String birthDateStr = "27/09/1985";
         double baseSalary = 3000.00;
         int departmentId = 4;
 
+        /*
+         * Department data to be inserted.
+         */
+        String dep1 = "Comestiveis";
+        String dep2 = "Laticinios";
+
         try {
 
-            // Opens the database connection using the DB utility class
+            // Opens the database connection
             conn = DB.getConnection();
 
-            /*
-             * Prepares the INSERT SQL statement.
-             *
-             * The Statement.RETURN_GENERATED_KEYS flag is an overload that requests
-             * the database to return the auto-generated primary key (Id).
-             */
-            pstm = conn.prepareStatement(
+            // =========================================================================
+            // 1. FIRST INSERTION: Seller
+            // =========================================================================
+            pstmSeller = conn.prepareStatement(
                     "INSERT INTO seller "
                             + "(Name, Email, BirthDate, BaseSalary, DepartmentId) "
                             + "VALUES (?, ?, ?, ?, ?)",
                     Statement.RETURN_GENERATED_KEYS
             );
 
-            /*
-             * Parses the String into a LocalDate (java.time API).
-             */
             LocalDate birthDate = LocalDate.parse(birthDateStr, dtf);
 
-            /*
-             * Assigns values to the SQL parameters (placeholders ?).
-             * Parameter index in PreparedStatement starts at 1.
-             *
-             * #1 (?) -> Name
-             * #2 (?) -> Email
-             * #3 (?) -> BirthDate (java.sql.Date.valueOf converts LocalDate directly to java.sql.Date)
-             * #4 (?) -> BaseSalary
-             * #5 (?) -> DepartmentId
-             */
-            pstm.setString(1, name);
-            pstm.setString(2, email);
-            pstm.setDate(3, Date.valueOf(birthDate));
-            pstm.setDouble(4, baseSalary);
-            pstm.setInt(5, departmentId);
+            pstmSeller.setString(1, name);
+            pstmSeller.setString(2, email);
+            pstmSeller.setDate(3, Date.valueOf(birthDate));
+            pstmSeller.setDouble(4, baseSalary);
+            pstmSeller.setInt(5, departmentId);
 
-            /*
-             * Executes the INSERT command.
-             * The executeUpdate() method returns the number of affected rows.
-             */
-            int rowsAffected = pstm.executeUpdate();
+            int rowsSeller = pstmSeller.executeUpdate();
 
-            /*
-             * Checks if the insertion was successful (at least 1 row affected).
-             */
-            if (rowsAffected > 0) {
-
-                /*
-                 * Try-with-resources: retrieves the ResultSet containing the generated Id.
-                 * The ResultSet is automatically closed at the end of the try block,
-                 * eliminating the need for additional finally blocks for rset.
-                 */
-                try (ResultSet rset = pstm.getGeneratedKeys()) {
-
+            if (rowsSeller > 0) {
+                try (ResultSet rset = pstmSeller.getGeneratedKeys()) {
                     if (rset.next()) {
-
-                        // Retrieves the returned Id from the first column of the ResultSet
                         int id = rset.getInt(1);
-
-                        // Prints the registered data confirming the generated Id from the database
+                        System.out.println("--- SELLER INSERTED ---");
                         System.out.printf(
                                 "Id: %d%n"
                                         + "Name: %s%n"
@@ -102,58 +73,65 @@ public class InserirDados {
                                         + "Birth Date: %s%n"
                                         + "Base Salary: %.2f%n"
                                         + "Department Id: %d%n%n",
-                                id,
-                                name,
-                                email,
-                                birthDate.format(dtf), // Displays formatted date
-                                baseSalary,
-                                departmentId
+                                id, name, email, birthDate.format(dtf), baseSalary, departmentId
                         );
                     }
                 }
-
-            } else {
-
-                System.out.println("No rows were affected.");
-
             }
 
-            System.out.println("Done! Rows affected: " + rowsAffected);
+            // =========================================================================
+            // 2. SECOND INSERTION: Multiple Departments
+            // =========================================================================
+            // Note the SQL syntax for multiple parameter placeholders: VALUES (?), (?)
+            pstmDepartment = conn.prepareStatement(
+                    "INSERT INTO department (Name) VALUES (?), (?)",
+                    Statement.RETURN_GENERATED_KEYS
+            );
+
+            /*
+             * Assigns values to the SQL parameters:
+             * #1 (?) -> "Comestiveis"
+             * #2 (?) -> "Laticinios"
+             */
+            pstmDepartment.setString(1, dep1);
+            pstmDepartment.setString(2, dep2);
+
+            int rowsDepartment = pstmDepartment.executeUpdate();
+
+            if (rowsDepartment > 0) {
+                try (ResultSet rset = pstmDepartment.getGeneratedKeys()) {
+                    System.out.println("--- DEPARTMENTS INSERTED ---");
+                    // Using 'while' because multiple rows were inserted
+                    while (rset.next()) {
+                        int id = rset.getInt(1);
+                        System.out.println("Generated Department ID: " + id);
+                    }
+                    System.out.println();
+                }
+            }
+
+            System.out.println("Done! Total seller rows affected: " + rowsSeller);
+            System.out.println("Done! Total department rows affected: " + rowsDepartment);
 
         } catch (SQLException e) {
 
-            /*
-             * Database error handling.
-             *
-             * Error code 1062 in MySQL indicates a UNIQUE constraint violation.
-             * In this case, it means the provided email already exists in the seller table.
-             */
             if (e.getErrorCode() == 1062) {
-
                 System.out.println("Email already registered.");
-
             } else {
-
                 System.out.println("Error while executing the SQL statement:");
                 e.printStackTrace();
-
             }
 
         } catch (DateTimeParseException e) {
 
-            // Specific exception handling for the java.time API (invalid date format)
             System.out.println("Invalid date format:");
             e.printStackTrace();
 
         } finally {
 
-            /*
-             * Closing JDBC resources (Statement and Connection).
-             *
-             * Since JDBC interacts with external resources outside the JVM,
-             * objects must be closed manually to prevent resource leaks.
-             */
-            DB.closeStatement(pstm);
+            // Close both statements safely
+            DB.closeStatement(pstmSeller);
+            DB.closeStatement(pstmDepartment);
             DB.closeConnection();
 
         }
