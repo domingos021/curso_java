@@ -1,4 +1,5 @@
 package main.projetobd_demo_dao_jdbc.model.dao.impl;
+
 import main.projetobd_demo_dao_jdbc.model.dao.SellerDao;
 import main.projetobd_demo_dao_jdbc.model.entities.Department;
 import main.projetobd_demo_dao_jdbc.model.entities.Seller;
@@ -30,6 +31,9 @@ public class SellerDaoJDBC implements SellerDao {
     public void insert(Seller obj) {
         PreparedStatement st = null;
         try {
+            // Desativa auto-commit para iniciar o controle explícito de transação
+            conn.setAutoCommit(false);
+
             st = conn.prepareStatement(
                     "INSERT INTO seller "
                             + "(Name, Email, BirthDate, BaseSalary, DepartmentId) "
@@ -56,11 +60,26 @@ public class SellerDaoJDBC implements SellerDao {
             else {
                 throw new DbException("Unexpected error! No rows affected!");
             }
+
+            // Efetiva as alterações no banco de dados se tudo ocorrer com sucesso
+            conn.commit();
         }
         catch (SQLException e) {
+            try {
+                // Cancela todas as alterações pendentes em caso de erro
+                conn.rollback();
+            } catch (SQLException e1) {
+                throw new DbException("Error rolling back transaction! Cause: " + e1.getMessage());
+            }
             throw new DbException(e.getMessage());
         }
         finally {
+            try {
+                // Restaura o modo padrão da conexão
+                conn.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             DB.closeStatement(st);
         }
     }
@@ -69,6 +88,9 @@ public class SellerDaoJDBC implements SellerDao {
     public void update(Seller obj) {
         PreparedStatement st = null;
         try {
+            // Desativa auto-commit para controle explícito da transação
+            conn.setAutoCommit(false);
+
             st = conn.prepareStatement(
                     "UPDATE seller "
                             + "SET Name = ?, Email = ?, BirthDate = ?, BaseSalary = ?, DepartmentId = ? "
@@ -82,11 +104,25 @@ public class SellerDaoJDBC implements SellerDao {
             st.setInt(6, obj.getId());
 
             st.executeUpdate();
+
+            // Efetiva a atualização
+            conn.commit();
         }
         catch (SQLException e) {
+            try {
+                // Desfaz a operação em caso de exceção
+                conn.rollback();
+            } catch (SQLException e1) {
+                throw new DbException("Error rolling back transaction! Cause: " + e1.getMessage());
+            }
             throw new DbException(e.getMessage());
         }
         finally {
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             DB.closeStatement(st);
         }
     }
@@ -95,16 +131,33 @@ public class SellerDaoJDBC implements SellerDao {
     public void deleteById(Integer id) {
         PreparedStatement st = null;
         try {
+            // Desativa auto-commit para controle explícito da transação
+            conn.setAutoCommit(false);
+
             st = conn.prepareStatement("DELETE FROM seller WHERE Id = ?");
 
             st.setInt(1, id);
 
             st.executeUpdate();
+
+            // Efetiva a exclusão
+            conn.commit();
         }
         catch (SQLException e) {
+            try {
+                // Desfaz a exclusão se falhar
+                conn.rollback();
+            } catch (SQLException e1) {
+                throw new DbException("Error rolling back transaction! Cause: " + e1.getMessage());
+            }
             throw new DbException(e.getMessage());
         }
         finally {
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             DB.closeStatement(st);
         }
     }
@@ -207,10 +260,21 @@ public class SellerDaoJDBC implements SellerDao {
         ResultSet rs = null;
         try {
             st = conn.prepareStatement(
+
+                    /*
+                     * Expected output:
+                     * - Retrieve all sellers from the database.
+                     * - Join each seller with its corresponding department.
+                     * - Return the sellers sorted alphabetically by name.
+                     */
+                    /*
+                     * Selects all columns from the seller table
+                     * and the department name as "DepName".
+                     */
                     "SELECT seller.*,department.Name as DepName "
-                            + "FROM seller INNER JOIN department "
-                            + "ON seller.DepartmentId = department.Id "
-                            + "ORDER BY Name");
+                            + "FROM seller INNER JOIN department " // Join the seller table with the department table to retrieve related data.
+                            +"ON seller.DepartmentId = department.Id " // Match each seller with its corresponding department.
+                            + "ORDER BY Name"); // Sort the result by name in ascending order.
 
             rs = st.executeQuery();
 
@@ -279,7 +343,7 @@ public class SellerDaoJDBC implements SellerDao {
                              */
                             + "ORDER BY Name");
             /*
-                * The question mark (?)1, in the SQL query is a placeholder for a parameter.
+             * The question mark (?)1, in the SQL query is a placeholder for a parameter.
              */
             st.setInt(1, department.getId());
 
@@ -372,9 +436,9 @@ public class SellerDaoJDBC implements SellerDao {
         }
     }
 
-     //Functions
-    private  Department instantiateDepartment(ResultSet rst) throws  SQLException {
-       Department dept = new Department();
+    //Functions
+    private Department instantiateDepartment(ResultSet rst) throws SQLException {
+        Department dept = new Department();
 
         // Populate the Department object using the values
         // from the current ResultSet row.
