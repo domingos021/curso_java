@@ -1,16 +1,16 @@
 package main.projetobd_demo_dao_jdbc.applicaction;
 
-import main.projetobd_demo_dao_jdbc.applicaction.controllers.SellerService;
-import main.projetobd_demo_dao_jdbc.applicaction.ui.SellerMenu;
+import main.projetobd_demo_dao_jdbc.applicaction.controllers.DepartmentService;
+import main.projetobd_demo_dao_jdbc.applicaction.ui.DepartmentMenu;
 import main.projetobd_demo_dao_jdbc.model.dao.DaoFactory;
-import main.projetobd_demo_dao_jdbc.model.dao.SellerDao;
+import main.projetobd_demo_dao_jdbc.model.dao.DepartmentDao;
 import mysql.exception.DbException;
 
 import java.util.Locale;
 import java.util.Scanner;
 
 /**
- * Main application entry point for Seller management (CLI).
+ * Main application entry point for Department management (CLI).
  * Configures the layered dependency tree (DAO -> Service -> UI Menu)
  * and handles global application exceptions.
  *
@@ -18,32 +18,32 @@ import java.util.Scanner;
  * ARCHITECTURE AND LAYER INTERMEDIATION TREE:
  *
  *                     ┌────────────────────────┐
- *                     │   TesterMain (Main)    │
+ *                     │    TestMain02 (Main)   │
  *                     └───────────┬────────────┘
  *                                 │ Instantiates & Injects
  *                                 ▼
  *                     ┌────────────────────────┐
- *                     │       SellerMenu       │ (UI / Presentation)
+ *                     │     DepartmentMenu     │ (UI / Presentation)
  *                     └───────────┬────────────┘
  *                                 │
  *     Captures Scanner Input      │ Calls business operations
- *     & Displays to Console       │ (findById, findByDepartment, save, etc.)
+ *     & Displays to Console       │ (findById, save, update, etc.)
  *                                 ▼
  *                     ┌────────────────────────┐
- *                     │     SellerService      │ (Service / Controller)
+ *                     │   DepartmentService    │ (Service / Controller)
  *                     └───────────┬────────────┘
  *                                 │
  *     Business Rules & Layer      │ Delegates data calls
  *     Intermediation              │ to the interface
  *                                 ▼
  *                     ┌────────────────────────┐
- *                     │       SellerDao        │ (Data Interface)
+ *                     │     DepartmentDao      │ (Data Interface)
  *                     └───────────┬────────────┘
  *                                 │
  *                                 │ Implemented by
  *                                 ▼
  *                     ┌────────────────────────┐
- *                     │     SellerDaoJDBC      │ (Concrete Implementation)
+ *                     │   DepartmentDaoJDBC    │ (Concrete Implementation)
  *                     └───────────┬────────────┘
  *                                 │
  *                                 │ Executes SQL
@@ -53,7 +53,7 @@ import java.util.Scanner;
  *                     └────────────────────────┘
  * </pre>
  */
-public class TesterMain {
+public class TestMain02 {
 
     public static void main(String[] args) {
         // Sets US locale for standardized number/currency formatting (decimal point)
@@ -66,22 +66,21 @@ public class TesterMain {
         try (Scanner sc = new Scanner(System.in)) {
 
             // 1. DATA LAYER INITIALIZATION (DAO)
-            // DaoFactory is responsible for creating DAO implementations.
-            // Decouples the application from concrete classes using the SellerDao interface.
-            SellerDao sellerDao = DaoFactory.createSellerDao();
+            // The Factory hides the JDBC implementation details and provides the DepartmentDao interface
+            DepartmentDao departmentDao = DaoFactory.createDepartmentDao();
 
             // 2. SERVICE LAYER INITIALIZATION (CONTROLLER)
-            // SellerService acts as an intermediate layer between UI and DAO persistence.
-            // Injected with SellerDao via constructor.
-            SellerService sellerService = new SellerService(sellerDao);
+            // The Service receives the DAO via Dependency Injection in its constructor.
+            // It acts as the intermediary between the UI and the Database.
+            DepartmentService departmentService = new DepartmentService(departmentDao);
 
             // 3. PRESENTATION LAYER INITIALIZATION (UI MENU)
-            // Instantiates SellerMenu encapsulating Scanner and SellerService.
-            SellerMenu menu = new SellerMenu(sc, sellerService);
+            // The Menu receives the Scanner (for user inputs) and the Service (to execute operations)
+            DepartmentMenu departmentMenu = new DepartmentMenu(sc, departmentService);
 
             // 4. MENU LIFECYCLE EXECUTION
             // Starts the interactive CLI loop
-            menu.runMenu();
+            departmentMenu.runMenu();
 
         } catch (DbException e) {
             // Handles database-specific exceptions (e.g., connection lost, foreign key issues)

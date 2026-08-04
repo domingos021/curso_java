@@ -54,6 +54,24 @@ public class ConsoleUtils {
     }
 
     /**
+     * Displays the main application menu for Departments.
+     */
+    public static void showDepartmentMenu() {
+
+        System.out.println();
+        System.out.println("====================================");
+        System.out.println("         DEPARTMENT DAO MENU        ");
+        System.out.println("====================================");
+        System.out.println("1 - Find department by ID");
+        System.out.println("2 - Find all departments");
+        System.out.println("3 - Insert department");
+        System.out.println("4 - Update department");
+        System.out.println("5 - Delete department");
+        System.out.println("0 - Back to Main Menu");
+        System.out.println("====================================");
+    }
+
+    /**
      * Prevents instantiation.
      */
     private ConsoleUtils() {
